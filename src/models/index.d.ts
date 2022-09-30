@@ -11,7 +11,7 @@ type UserMetaData = {
 export declare class User {
   readonly id: string;
   readonly name: string;
-  readonly email?: string | null;
+  readonly email: string;
   readonly nativeLanguage?: string | null;
   readonly learningLanguage?: string | null;
   readonly createdAt?: string | null;

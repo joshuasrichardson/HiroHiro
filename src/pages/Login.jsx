@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, TextInput, Platform, View } from "react-native";
-import { DataStore } from "aws-amplify";
 import { User } from "../models";
 import HHButton from "../components/HHButton";
 import HHView from "../components/HHView";
@@ -18,11 +17,8 @@ const Login = ({ navigation }) => {
     try {
       const user = await ServerFacade.login(email, password);
       if (user) {
-        navigation.navigate("Profile", { email });
-        // setUser(user);
-        // setName("");
-        setEmail("");
-        setPassword("");
+        // console.log("User:", user);
+        navigation.navigate("Profile", user);
       }
     } catch (err) {
       console.log("TODO: Show error message to user");

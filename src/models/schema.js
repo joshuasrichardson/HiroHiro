@@ -21,7 +21,7 @@ export const schema = {
                     "name": "email",
                     "isArray": false,
                     "type": "AWSEmail",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "nativeLanguage": {
@@ -63,15 +63,34 @@ export const schema = {
                     "properties": {}
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmail",
+                        "queryField": "userByEmail",
+                        "fields": [
+                            "email",
+                            "id"
+                        ]
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
                             {
-                                "allow": "public",
+                                "provider": "userPools",
+                                "ownerField": "owner",
+                                "allow": "owner",
                                 "operations": [
                                     "create",
-                                    "update",
                                     "delete",
+                                    "update"
+                                ],
+                                "identityClaim": "cognito:username"
+                            },
+                            {
+                                "allow": "private",
+                                "operations": [
                                     "read"
                                 ]
                             }
@@ -83,5 +102,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "475e9ae75c6c5fd9a4e09179c3d63f2e"
+    "version": "884d2c39a74c2d3189a021a313cac556"
 };

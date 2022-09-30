@@ -1,0 +1,16 @@
+{
+  "resourceName": "s3hirohirostoragecbb78688",
+  "bucketName": "hirohiro-storage-cbb78688",
+  "policyUUID": "50ca984b",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

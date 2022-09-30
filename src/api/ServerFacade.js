@@ -1,4 +1,8 @@
 import { Auth } from "aws-amplify";
+import { DataStore } from "aws-amplify";
+import { User } from "../models";
+import { API, graphqlOperation } from "aws-amplify";
+import { userByEmail } from "../graphql/queries";
 
 const register = async (username, password, email) => {
   try {
@@ -30,7 +34,13 @@ const confirmSignUp = async (username, code) => {
 
 const login = async (username, password) => {
   try {
-    return await Auth.signIn(username, password);
+    await Auth.signIn(username, password);
+    const response = await API.graphql({
+      query: userByEmail,
+      variables: { email: username },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    return response.data.userByEmail.items[0];
   } catch (error) {
     console.log("error signing in", error);
   }
