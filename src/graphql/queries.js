@@ -5,10 +5,16 @@ export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       id
-      name
+      firstName
+      lastName
       email
       nativeLanguage
       learningLanguage
+      pictureURLs
+      nationality
+      languageLevel
+      languageGoals
+      hobbies
       createdAt
       updatedAt
       _version
@@ -27,10 +33,16 @@ export const listUsers = /* GraphQL */ `
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
+        firstName
+        lastName
         email
         nativeLanguage
         learningLanguage
+        pictureURLs
+        nationality
+        languageLevel
+        languageGoals
+        hobbies
         createdAt
         updatedAt
         _version
@@ -58,10 +70,16 @@ export const syncUsers = /* GraphQL */ `
     ) {
       items {
         id
-        name
+        firstName
+        lastName
         email
         nativeLanguage
         learningLanguage
+        pictureURLs
+        nationality
+        languageLevel
+        languageGoals
+        hobbies
         createdAt
         updatedAt
         _version
@@ -93,10 +111,16 @@ export const userByEmail = /* GraphQL */ `
     ) {
       items {
         id
-        name
+        firstName
+        lastName
         email
         nativeLanguage
         learningLanguage
+        pictureURLs
+        nationality
+        languageLevel
+        languageGoals
+        hobbies
         createdAt
         updatedAt
         _version

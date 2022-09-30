@@ -5,10 +5,16 @@ export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
       id
-      name
+      firstName
+      lastName
       email
       nativeLanguage
       learningLanguage
+      pictureURLs
+      nationality
+      languageLevel
+      languageGoals
+      hobbies
       createdAt
       updatedAt
       _version
@@ -22,10 +28,16 @@ export const onUpdateUser = /* GraphQL */ `
   subscription OnUpdateUser {
     onUpdateUser {
       id
-      name
+      firstName
+      lastName
       email
       nativeLanguage
       learningLanguage
+      pictureURLs
+      nationality
+      languageLevel
+      languageGoals
+      hobbies
       createdAt
       updatedAt
       _version
@@ -39,10 +51,16 @@ export const onDeleteUser = /* GraphQL */ `
   subscription OnDeleteUser {
     onDeleteUser {
       id
-      name
+      firstName
+      lastName
       email
       nativeLanguage
       learningLanguage
+      pictureURLs
+      nationality
+      languageLevel
+      languageGoals
+      hobbies
       createdAt
       updatedAt
       _version

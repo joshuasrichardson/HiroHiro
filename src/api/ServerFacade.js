@@ -40,7 +40,7 @@ const login = async (username, password) => {
       variables: { email: username },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-    return response.data.userByEmail.items[0];
+    return response.data.userByEmail.items.filter((user) => !user._deleted)[0];
   } catch (error) {
     console.log("error signing in", error);
   }

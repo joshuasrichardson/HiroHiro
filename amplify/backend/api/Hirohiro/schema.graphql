@@ -7,9 +7,15 @@ type User
     ]
   ) {
   id: ID!
-  name: String!
-  email: AWSEmail!
+  firstName: String
+  lastName: String
+  email: AWSEmail
     @index(name: "byEmail", queryField: "userByEmail", sortKeyFields: ["id"])
   nativeLanguage: String
   learningLanguage: String
+  pictureURLs: [String]
+  nationality: String
+  languageLevel: String
+  languageGoals: [String]
+  hobbies: [String]
 }

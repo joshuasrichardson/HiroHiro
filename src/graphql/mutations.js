@@ -8,10 +8,16 @@ export const createUser = /* GraphQL */ `
   ) {
     createUser(input: $input, condition: $condition) {
       id
-      name
+      firstName
+      lastName
       email
       nativeLanguage
       learningLanguage
+      pictureURLs
+      nationality
+      languageLevel
+      languageGoals
+      hobbies
       createdAt
       updatedAt
       _version
@@ -28,10 +34,16 @@ export const updateUser = /* GraphQL */ `
   ) {
     updateUser(input: $input, condition: $condition) {
       id
-      name
+      firstName
+      lastName
       email
       nativeLanguage
       learningLanguage
+      pictureURLs
+      nationality
+      languageLevel
+      languageGoals
+      hobbies
       createdAt
       updatedAt
       _version
@@ -48,10 +60,16 @@ export const deleteUser = /* GraphQL */ `
   ) {
     deleteUser(input: $input, condition: $condition) {
       id
-      name
+      firstName
+      lastName
       email
       nativeLanguage
       learningLanguage
+      pictureURLs
+      nationality
+      languageLevel
+      languageGoals
+      hobbies
       createdAt
       updatedAt
       _version
