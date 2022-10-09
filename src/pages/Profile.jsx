@@ -1,4 +1,12 @@
-import { Pressable, StyleSheet, Text, View, Image } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 // import { Context } from "../../App";
 // import React, { useContext } from "react";
 
@@ -6,29 +14,45 @@ const Profile = ({ navigation, route }) => {
   // const { user } = useContext(Context);
   const user = route.params;
   return (
-    <View>
-      <View style={styles.imageContainer}>
-        <Image source={require("../../assets/guy.png")} style={styles.image} />
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>{user.firstName + " " + user.lastName}</Text>
-      </View>
-      <View style={styles.textContainer}>
-        <Text>Email: {user.email}</Text>
-        <Text>Nationality: {user.nationality}</Text>
-        <Text>Native Language: {user.nativeLanguage}</Text>
-        <Text>Studying: {user.learningLanguage}</Text>
-        <Text>Language Level: {user.languageLevel}</Text>
-        <Text>Hobbies:</Text>
-        {user.hobbies.map((hobby) => (
-          <Text key={hobby}>{hobby}</Text>
-        ))}
-        <Text>Language Goals:</Text>
-        {user.languageGoals.map((goal) => (
-          <Text key={goal}>{goal}</Text>
-        ))}
-      </View>
-    </View>
+    <SafeAreaView style={styles.outerContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require("../../assets/guy.png")}
+            style={styles.image}
+          />
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>
+            {user.firstName + " " + user.lastName}
+          </Text>
+        </View>
+        <View contentContainerStyle={styles.textContainer}>
+          <Text style={styles.header}>Email:</Text>
+          <Text style={styles.text}>{user.email}</Text>
+          <Text style={styles.header}>Nationality:</Text>
+          <Text style={styles.text}>{user.nationality}</Text>
+          <Text style={styles.header}>Native Language:</Text>
+          <Text style={styles.text}>{user.nativeLanguage}</Text>
+          <Text style={styles.header}>Studying:</Text>
+          <Text style={styles.text}>{user.learningLanguage}</Text>
+          <Text style={styles.header}>Language Level:</Text>
+          <Text style={styles.text}>{user.languageLevel}</Text>
+          <Text style={styles.header}>Hobbies:</Text>
+          {user.hobbies.map((hobby) => (
+            <Text key={hobby} style={styles.text}>
+              {hobby}
+            </Text>
+          ))}
+          <Text style={styles.header}>Language Goals:</Text>
+          {user.languageGoals.map((goal) => (
+            <Text key={goal} style={styles.text}>
+              {goal}
+            </Text>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -39,20 +63,39 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: 250,
+    height: 300,
+    width: "100%",
   },
   image: {
-    width: 200,
-    height: 200,
+    width: "90%",
+    height: "100%",
     borderColor: "orange",
     borderWidth: 5,
-    borderRadius: 100,
+    borderRadius: 20,
     border: "solid",
+  },
+  outerContainer: {
+    flex: 1,
   },
   textContainer: {
     display: "flex",
     padding: 30,
     alignItems: "flex-start",
+  },
+  scrollContainer: {
+    display: "flex",
+    padding: 20,
+    alignItems: "center",
+  },
+  header: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    padding: 10,
+    paddingTop: 25,
+  },
+  text: {
+    fontSize: "20px",
+    padding: 10,
   },
   titleContainer: {
     display: "flex",
@@ -60,6 +103,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 26,
+    fontSize: 30,
+    paddingTop: 20,
   },
 });
