@@ -1,12 +1,19 @@
 import { Pressable, StyleSheet, Text, TextInput } from "react-native";
 import React, { useState } from "react";
+import ServerFacade from "../api/ServerFacade";
 
-const HHField = ({ header, value, setValue, saveData, user }) => {
+const HHField = ({ header, attribute, value, setValue, user, setUser }) => {
   const [editing, setEditing] = useState(false);
 
-  const onBlur = async (val, setVal) => {
+  const onBlur = async () => {
     setEditing(false);
-    setVal(user, val);
+    const u = await ServerFacade.setUserAttribute(
+      user.id,
+      attribute,
+      value,
+      user._version
+    );
+    if (u) setUser(u);
   };
 
   return (
@@ -18,7 +25,7 @@ const HHField = ({ header, value, setValue, saveData, user }) => {
             onChangeText={setValue}
             value={value}
             style={styles.text}
-            onBlur={() => onBlur(value, saveData, setEditing)}
+            onBlur={onBlur}
           />
         )) || <Text style={styles.text}>{value}</Text>}
       </Pressable>

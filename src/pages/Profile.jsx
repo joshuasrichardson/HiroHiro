@@ -15,8 +15,8 @@ import HHField from "../components/HHField";
 
 const Profile = ({ navigation, route }) => {
   // const { user } = useContext(Context);
-  const user = route.params;
-  const [nationality, setNationality] = useState(user.nationality);
+  const [user, setUser] = useState(route.params);
+  const [nationality, setNationality] = useState(route.params.nationality);
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -39,8 +39,9 @@ const Profile = ({ navigation, route }) => {
             header="Nationality"
             value={nationality}
             setValue={setNationality}
-            saveData={ServerFacade.setNationality}
+            attribute="nationality"
             user={user}
+            setUser={setUser}
           ></HHField>
           <Text style={styles.header}>Native Language:</Text>
           <Text style={styles.text}>{user.nativeLanguage}</Text>
@@ -49,13 +50,13 @@ const Profile = ({ navigation, route }) => {
           <Text style={styles.header}>Language Level:</Text>
           <Text style={styles.text}>{user.languageLevel}</Text>
           <Text style={styles.header}>Hobbies:</Text>
-          {user.hobbies.map((hobby) => (
+          {user.hobbies?.map((hobby) => (
             <Text key={hobby} style={styles.text}>
               {hobby}
             </Text>
           ))}
           <Text style={styles.header}>Language Goals:</Text>
-          {user.languageGoals.map((goal) => (
+          {user.languageGoals?.map((goal) => (
             <Text key={goal} style={styles.text}>
               {goal}
             </Text>

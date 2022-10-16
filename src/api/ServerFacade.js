@@ -47,20 +47,28 @@ const login = async (username, password) => {
   }
 };
 
-const setNationality = async (user, nationality) => {
-  user.nationality = nationality;
-  user.createdAt = undefined;
-  user.updatedAt = undefined;
-  user._deleted = undefined;
-  user._lastChangedAt = undefined;
-  user.owner = undefined;
+const getUserUpdateReq = (id, attribute, value, version) => {
+  if (attribute === "nationality") {
+    return {
+      id: id,
+      _version: version,
+      nationality: value,
+    };
+  }
+};
+
+const setUserAttribute = async (id, attribute, value, version) => {
   try {
+    console.log(attribute, value);
+    const updateRequest = getUserUpdateReq(id, attribute, value, version);
+    console.log(updateRequest);
     const response = await API.graphql({
       query: updateUser,
-      variables: { input: user },
+      variables: { input: updateRequest },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-    console.log(response);
+    console.log(response.data.updateUser);
+    return response.data.updateUser;
   } catch (error) {
     console.log(error);
   }
@@ -70,7 +78,7 @@ const ServerFacade = {
   register,
   confirmSignUp,
   login,
-  setNationality,
+  setUserAttribute,
 };
 
 export default ServerFacade;
