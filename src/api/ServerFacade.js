@@ -3,6 +3,7 @@ import { DataStore } from "aws-amplify";
 import { User } from "../models";
 import { API, graphqlOperation } from "aws-amplify";
 import { userByEmail } from "../graphql/queries";
+import { updateUser } from "../graphql/mutations";
 
 const register = async (username, password, email) => {
   try {
@@ -46,10 +47,30 @@ const login = async (username, password) => {
   }
 };
 
+const setNationality = async (user, nationality) => {
+  user.nationality = nationality;
+  user.createdAt = undefined;
+  user.updatedAt = undefined;
+  user._deleted = undefined;
+  user._lastChangedAt = undefined;
+  user.owner = undefined;
+  try {
+    const response = await API.graphql({
+      query: updateUser,
+      variables: { input: user },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const ServerFacade = {
   register,
   confirmSignUp,
   login,
+  setNationality,
 };
 
 export default ServerFacade;

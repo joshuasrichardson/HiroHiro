@@ -1,0 +1,26 @@
+{
+  "trigger": true,
+  "modules": [
+    "verification-link"
+  ],
+  "parentResource": "hirohiro32a1a241",
+  "functionName": "hirohiro32a1a241CustomMessage",
+  "resourceName": "hirohiro32a1a241CustomMessage",
+  "parentStack": "auth",
+  "triggerEnvs": [
+    {
+      "key": "RESOURCENAME",
+      "value": "resourceName"
+    }
+  ],
+  "triggerDir": "C:\\snapshot\\repo\\build\\node_modules\\@aws-amplify\\amplify-category-auth\\provider-utils\\awscloudformation\\triggers\\CustomMessage",
+  "triggerTemplate": "CustomMessage.json.ejs",
+  "triggerEventPath": "CustomMessage.event.json",
+  "roleName": "hirohiro32a1a241CustomMessage",
+  "skipEdit": true,
+  "REDIRECTURL": "https://mail.google.com/",
+  "EMAILSUBJECT": "Hirohiro Account Confirmation",
+  "EMAILMESSAGE": "Please confirm your Hirohiro account by clicking this link.",
+  "RESOURCENAME": "resourceName",
+  "enableCors": false
+}

@@ -129,13 +129,17 @@ export const schema = {
                                 "operations": [
                                     "create",
                                     "delete",
-                                    "update"
+                                    "update",
+                                    "read"
                                 ],
                                 "identityClaim": "cognito:username"
                             },
                             {
                                 "allow": "private",
                                 "operations": [
+                                    "create",
+                                    "delete",
+                                    "update",
                                     "read"
                                 ]
                             }

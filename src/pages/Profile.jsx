@@ -2,17 +2,22 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   View,
   Image,
   SafeAreaView,
   ScrollView,
 } from "react-native";
 // import { Context } from "../../App";
-// import React, { useContext } from "react";
+import React, { useState } from "react";
+import ServerFacade from "../api/ServerFacade";
+import HHField from "../components/HHField";
 
 const Profile = ({ navigation, route }) => {
   // const { user } = useContext(Context);
   const user = route.params;
+  const [nationality, setNationality] = useState(user.nationality);
+
   return (
     <SafeAreaView style={styles.outerContainer}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -30,8 +35,13 @@ const Profile = ({ navigation, route }) => {
         <View contentContainerStyle={styles.textContainer}>
           <Text style={styles.header}>Email:</Text>
           <Text style={styles.text}>{user.email}</Text>
-          <Text style={styles.header}>Nationality:</Text>
-          <Text style={styles.text}>{user.nationality}</Text>
+          <HHField
+            header="Nationality"
+            value={nationality}
+            setValue={setNationality}
+            saveData={ServerFacade.setNationality}
+            user={user}
+          ></HHField>
           <Text style={styles.header}>Native Language:</Text>
           <Text style={styles.text}>{user.nativeLanguage}</Text>
           <Text style={styles.header}>Studying:</Text>
@@ -106,4 +116,5 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingTop: 20,
   },
+  editButton: {},
 });

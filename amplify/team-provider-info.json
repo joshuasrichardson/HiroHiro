@@ -9,11 +9,21 @@
       "UnauthRoleName": "amplify-hirohiro-staging-53353-unauthRole",
       "StackName": "amplify-hirohiro-staging-53353",
       "StackId": "arn:aws:cloudformation:us-west-1:470439608549:stack/amplify-hirohiro-staging-53353/d85a06e0-2112-11ed-88c7-062d85781d33",
-      "AmplifyAppId": "d231qvk21pcrg5"
+      "AmplifyAppId": "d231qvk21pcrg5",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-hirohiro-staging-53353-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
         "hirohiro32a1a241": {}
+      },
+      "function": {
+        "hirohiro32a1a241PostConfirmation": {
+          "GROUP": "HiroHiroUser"
+        },
+        "hirohiro32a1a241CustomMessage": {
+          "deploymentBucketName": "amplify-hirohiro-staging-53353-deployment",
+          "s3Key": "amplify-builds/hirohiro32a1a241CustomMessage-335973362b6443656234-build.zip"
+        }
       }
     }
   }

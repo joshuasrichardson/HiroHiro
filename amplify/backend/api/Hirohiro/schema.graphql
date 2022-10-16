@@ -2,8 +2,8 @@ type User
   @model
   @auth(
     rules: [
-      { allow: owner, operations: [create, delete, update] }
-      { allow: private, operations: [read] }
+      { allow: owner, operations: [create, delete, update, read] }
+      { allow: private, operations: [create, delete, update, read] }
     ]
   ) {
   id: ID!
