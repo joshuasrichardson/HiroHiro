@@ -48,13 +48,11 @@ const login = async (username, password) => {
 };
 
 const getUserUpdateReq = (id, attribute, value, version) => {
-  if (attribute === "nationality") {
-    return {
-      id: id,
-      _version: version,
-      nationality: value,
-    };
-  }
+  return {
+    id: id,
+    _version: version,
+    [attribute]: value,
+  };
 };
 
 const setUserAttribute = async (id, attribute, value, version) => {

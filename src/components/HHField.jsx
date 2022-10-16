@@ -16,18 +16,32 @@ const HHField = ({ header, attribute, value, setValue, user, setUser }) => {
     if (u) setUser(u);
   };
 
+  const getValueText = () => {
+    return <Text style={styles.text}>{value}</Text>;
+  };
+
+  const getValueInputText = () => {
+    return (
+      <TextInput
+        onChangeText={setValue}
+        value={value}
+        style={styles.text}
+        onBlur={onBlur}
+      />
+    );
+  };
+
   return (
     <>
-      <Text style={styles.header}>{header}:</Text>
-      <Pressable style={styles.editButton} onPress={() => setEditing(true)}>
-        {(editing && (
-          <TextInput
-            onChangeText={setValue}
-            value={value}
-            style={styles.text}
-            onBlur={onBlur}
-          />
-        )) || <Text style={styles.text}>{value}</Text>}
+      <Text key={header} style={styles.header}>
+        {header}:
+      </Text>
+      <Pressable
+        key={header + "pressable"}
+        style={styles.editButton}
+        onPress={() => setEditing(true)}
+      >
+        {(editing && getValueInputText()) || getValueText()}
       </Pressable>
     </>
   );

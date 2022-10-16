@@ -1,22 +1,25 @@
 import {
-  Pressable,
   StyleSheet,
   Text,
-  TextInput,
   View,
   Image,
   SafeAreaView,
   ScrollView,
 } from "react-native";
-// import { Context } from "../../App";
 import React, { useState } from "react";
-import ServerFacade from "../api/ServerFacade";
 import HHField from "../components/HHField";
+import HHListField from "../components/HHListField";
 
 const Profile = ({ navigation, route }) => {
-  // const { user } = useContext(Context);
   const [user, setUser] = useState(route.params);
-  const [nationality, setNationality] = useState(route.params.nationality);
+  const [nationality, setNationality] = useState(user.nationality);
+  const [nativeLanguage, setNativeLanguage] = useState(user.nativeLanguage);
+  const [learningLanguage, setLearningLanguage] = useState(
+    user.learningLanguage
+  );
+  const [languageLevel, setLanguageLevel] = useState(user.languageLevel);
+  const [hobbies, setHobbies] = useState(user.hobbies);
+  const [languageGoals, setLanguageGoals] = useState(user.languageGoals);
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -42,21 +45,41 @@ const Profile = ({ navigation, route }) => {
             attribute="nationality"
             user={user}
             setUser={setUser}
-          ></HHField>
-          <Text style={styles.header}>Native Language:</Text>
-          <Text style={styles.text}>{user.nativeLanguage}</Text>
-          <Text style={styles.header}>Studying:</Text>
-          <Text style={styles.text}>{user.learningLanguage}</Text>
-          <Text style={styles.header}>Language Level:</Text>
-          <Text style={styles.text}>{user.languageLevel}</Text>
-          <Text style={styles.header}>Hobbies:</Text>
-          {user.hobbies?.map((hobby) => (
-            <Text key={hobby} style={styles.text}>
-              {hobby}
-            </Text>
-          ))}
+          />
+          <HHField
+            header="Native Language"
+            value={nativeLanguage}
+            setValue={setNativeLanguage}
+            attribute="nativeLanguage"
+            user={user}
+            setUser={setUser}
+          />
+          <HHField
+            header="Studying"
+            value={learningLanguage}
+            setValue={setLearningLanguage}
+            attribute="learningLanguage"
+            user={user}
+            setUser={setUser}
+          />
+          <HHField
+            header="Language Level"
+            value={languageLevel}
+            setValue={setLanguageLevel}
+            attribute="languageLevel"
+            user={user}
+            setUser={setUser}
+          />
+          <HHListField
+            header="Hobbies"
+            values={hobbies}
+            setValues={setHobbies}
+            attribute="hobbies"
+            user={user}
+            setUser={setUser}
+          />
           <Text style={styles.header}>Language Goals:</Text>
-          {user.languageGoals?.map((goal) => (
+          {languageGoals?.map((goal) => (
             <Text key={goal} style={styles.text}>
               {goal}
             </Text>
