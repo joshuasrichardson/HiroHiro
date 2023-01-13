@@ -13,29 +13,25 @@ Amplify.configure(awsconfig);
 
 const Stack = createNativeStackNavigator();
 
-// const [user, setUser] = useState({ username: "" });
-
-// export const Context = createContext({
-//   user,
-//   setUser,
-// });
-
-{
-  /* <Context.Provider value={{ user: user, setUser: setUser }}> */
-}
-
-// </Context.Provider>
+export const AppContext = createContext<any>({
+  user: null,
+  setUser: () => null,
+});
 
 export default function App() {
+  const [user, setUser] = useState({ username: "" });
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="ConfirmSignUp" component={ConfirmSignUp} />
-        <Stack.Screen name="Profile" component={Profile} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AppContext.Provider value={{ user, setUser }}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="ConfirmSignUp" component={ConfirmSignUp} />
+          <Stack.Screen name="Profile" component={Profile} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AppContext.Provider>
   );
 }

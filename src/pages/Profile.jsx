@@ -6,20 +6,27 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import { AppContext } from "../../App";
+import React, { useState, useContext } from "react";
 import HHField from "../components/HHField";
 import HHListField from "../components/HHListField";
 
 const Profile = ({ navigation, route }) => {
-  const [user, setUser] = useState(route.params);
-  const [nationality, setNationality] = useState(user.nationality);
-  const [nativeLanguage, setNativeLanguage] = useState(user.nativeLanguage);
-  const [learningLanguage, setLearningLanguage] = useState(
-    user.learningLanguage
+  const { user } = useContext(AppContext);
+  const { profileUser } = route.params;
+
+  console.log("user", user);
+  console.log("profileUser", profileUser);
+  const [nationality, setNationality] = useState(profileUser.nationality);
+  const [nativeLanguage, setNativeLanguage] = useState(
+    profileUser.nativeLanguage
   );
-  const [languageLevel, setLanguageLevel] = useState(user.languageLevel);
-  const [hobbies, setHobbies] = useState(user.hobbies);
-  const [languageGoals, setLanguageGoals] = useState(user.languageGoals);
+  const [learningLanguage, setLearningLanguage] = useState(
+    profileUser.learningLanguage
+  );
+  const [languageLevel, setLanguageLevel] = useState(profileUser.languageLevel);
+  const [hobbies, setHobbies] = useState(profileUser.hobbies);
+  const [languageGoals, setLanguageGoals] = useState(profileUser.languageGoals);
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -32,58 +39,54 @@ const Profile = ({ navigation, route }) => {
         </View>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
-            {user.firstName + " " + user.lastName}
+            {profileUser.firstName + " " + profileUser.lastName}
           </Text>
         </View>
         <View contentContainerStyle={styles.textContainer}>
           <Text style={styles.header}>Email:</Text>
-          <Text style={styles.text}>{user.email}</Text>
+          <Text style={styles.text}>{profileUser.email}</Text>
+          <Text style={styles.header}>Nationality:</Text>
           <HHField
-            header="Nationality"
             value={nationality}
             setValue={setNationality}
             attribute="nationality"
-            user={user}
-            setUser={setUser}
+            canEdit={user.id === profileUser.id}
           />
+          <Text style={styles.header}>Native Language:</Text>
           <HHField
-            header="Native Language"
             value={nativeLanguage}
             setValue={setNativeLanguage}
             attribute="nativeLanguage"
-            user={user}
-            setUser={setUser}
+            canEdit={user.id === profileUser.id}
           />
+          <Text style={styles.header}>Studying:</Text>
           <HHField
-            header="Studying"
             value={learningLanguage}
             setValue={setLearningLanguage}
             attribute="learningLanguage"
-            user={user}
-            setUser={setUser}
+            canEdit={user.id === profileUser.id}
           />
+          <Text style={styles.header}>Language Level:</Text>
           <HHField
-            header="Language Level"
             value={languageLevel}
             setValue={setLanguageLevel}
             attribute="languageLevel"
-            user={user}
-            setUser={setUser}
+            canEdit={user.id === profileUser.id}
           />
+          <Text style={styles.header}>Hobbies:</Text>
           <HHListField
-            header="Hobbies"
             values={hobbies}
             setValues={setHobbies}
             attribute="hobbies"
-            user={user}
-            setUser={setUser}
+            canEdit={user.id === profileUser.id}
           />
           <Text style={styles.header}>Language Goals:</Text>
-          {languageGoals?.map((goal) => (
-            <Text key={goal} style={styles.text}>
-              {goal}
-            </Text>
-          ))}
+          <HHListField
+            values={languageGoals}
+            setValues={setLanguageGoals}
+            attribute="languageGoals"
+            canEdit={user.id === profileUser.id}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -141,4 +144,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   editButton: {},
+  header: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    padding: 10,
+    paddingTop: 25,
+  },
 });

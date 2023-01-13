@@ -1,24 +1,22 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, TextInput, Platform, View } from "react-native";
-import { User } from "../models";
 import HHButton from "../components/HHButton";
 import HHView from "../components/HHView";
 import ServerFacade from "../api/ServerFacade";
-// import { Context } from "../../App";
+import { AppContext } from "../../App";
 
 const Login = ({ navigation }) => {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const { setUser } = useContext(Context);
+  const { setUser } = useContext(AppContext);
 
   const login = async () => {
     try {
       const user = await ServerFacade.login(email, password);
       if (user) {
-        // console.log("User:", user);
-        navigation.navigate("Profile", user);
+        setUser(user);
+        navigation.navigate("Profile", { profileUser: user });
       }
     } catch (err) {
       console.log("TODO: Show error message to user");

@@ -1,30 +1,37 @@
-import { Pressable, StyleSheet, Text, TextInput } from "react-native";
-import React, { useState, useRef } from "react";
+import { StyleSheet, Text, TextInput } from "react-native";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import ServerFacade from "../api/ServerFacade";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import Button from "@mui/material/Button";
+import { AppContext } from "../../App";
 
-const HHListField = ({
-  header,
-  attribute,
-  values,
-  setValues,
-  user,
-  setUser,
-}) => {
+const HHListField = ({ attribute, values, setValues }) => {
   const [editing, setEditing] = useState(-1);
 
   const [textValue, setTextValue] = useState(values?.length ? values[0] : "");
   const refInputs = useRef(values?.length ? [...values] : [textValue]);
+  const inputRef = useRef(null);
+
+  const { user, setUser } = useContext(AppContext);
+
+  useEffect(() => {
+    if (editing >= 0) inputRef.current?.focus();
+  }, [editing, inputRef]);
 
   const addInput = () => {
     refInputs.current.push("");
+    setValues(refInputs.current);
+    edit(refInputs.current.length - 1);
   };
 
   const removeInput = (i) => {
-    refInputs.current.splic(i, 1)[0];
+    refInputs.current.splice(i, 1)[0];
   };
 
   const onBlur = async () => {
-    refInputs.current[editing] = textValue;
+    if (!textValue) removeInput(editing);
+    else refInputs.current[editing] = textValue;
     setValues(refInputs.current);
     const u = await ServerFacade.setUserAttribute(
       user.id,
@@ -36,43 +43,50 @@ const HHListField = ({
     setEditing(-1);
   };
 
-  const getValueText = (v) => {
-    return <Text style={styles.text}>{v}</Text>;
-  };
+  const handleFocus = (e) => e.target.select();
 
-  const getValueInputText = (index) => {
-    return (
-      <TextInput
-        style={styles.text}
-        onChangeText={setTextValue}
-        value={textValue}
-        onBlur={onBlur}
-      />
-    );
+  const edit = (index) => {
+    setEditing(index);
+    setTextValue(refInputs.current[index]);
   };
 
   return (
     <>
-      <Text key={header} style={styles.header}>
-        {header}:
-      </Text>
       {values?.map((v, index) => (
-        <Pressable
-          key={v + index}
-          style={styles.editButton}
-          onPress={() => {
-            setEditing(index);
-            setTextValue(refInputs.current[index]);
-          }}
-        >
-          {(editing === index && getValueInputText(index)) || getValueText(v)}
-        </Pressable>
+        <div style={styles.container} key={v + index + "-list-field"}>
+          {editing === index ? (
+            <TextInput
+              ref={index === editing ? inputRef : null}
+              style={styles.text}
+              onChangeText={setTextValue}
+              value={textValue}
+              onBlur={onBlur}
+              onFocus={handleFocus}
+            />
+          ) : (
+            <Text style={styles.text}>{v}</Text>
+          )}
+          <Button
+            variant="text"
+            style={styles.editButton}
+            onClick={() => edit(index)}
+          >
+            <EditIcon />
+          </Button>
+        </div>
       ))}
+      <Button style={styles.addButton} onClick={addInput}>
+        <AddIcon /> Add Hobby
+      </Button>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
   header: {
     fontSize: "20px",
     fontWeight: "bold",
@@ -83,7 +97,8 @@ const styles = StyleSheet.create({
     fontSize: "20px",
     padding: 10,
   },
-  editButton: {},
+  addButton: { color: "black", width: "fit-content", paddingLeft: 10 },
+  editButton: { color: "black", width: "20%" },
 });
 
 export default HHListField;

@@ -1,27 +1,23 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, TextInput, Platform, View } from "react-native";
-import { DataStore } from "aws-amplify";
-import { User } from "../models";
 import HHButton from "../components/HHButton";
 import HHView from "../components/HHView";
 import ServerFacade from "../api/ServerFacade";
-// import { Context } from "../../App";
+import { AppContext } from "../../App";
 
 const Register = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const { setUser } = useContext(Context);
+  const { setUser } = useContext(AppContext);
 
   async function register() {
     try {
       const user = await ServerFacade.register(email, password, email);
       if (user) {
-        console.log("Registered", name, password, email);
         navigation.navigate("ConfirmSignUp", { email });
-        // setUser(user);
-        setName("");
+        setUser(user);
         setEmail("");
         setPassword("");
       }
