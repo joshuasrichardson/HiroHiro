@@ -6,7 +6,6 @@ import ServerFacade from "../api/ServerFacade";
 import { AppContext } from "../../App";
 
 const Register = ({ navigation }) => {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

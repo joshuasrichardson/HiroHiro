@@ -5,6 +5,7 @@ import Home from "./src/pages/Home";
 import Profile from "./src/pages/Profile";
 import Login from "./src/pages/Login";
 import ConfirmSignUp from "./src/pages/ConfirmSignUp";
+import UserList from "./src/pages/UserList";
 import Register from "./src/pages/Register";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -30,6 +31,7 @@ export default function App() {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="ConfirmSignUp" component={ConfirmSignUp} />
           <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="UserList" component={UserList} />
         </Stack.Navigator>
       </NavigationContainer>
     </AppContext.Provider>

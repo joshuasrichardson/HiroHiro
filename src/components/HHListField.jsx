@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import { AppContext } from "../../App";
 
-const HHListField = ({ attribute, values, setValues }) => {
+const HHListField = ({ attribute, values, setValues, canEdit }) => {
   const [editing, setEditing] = useState(-1);
 
   const [textValue, setTextValue] = useState(values?.length ? values[0] : "");
@@ -66,18 +66,23 @@ const HHListField = ({ attribute, values, setValues }) => {
           ) : (
             <Text style={styles.text}>{v}</Text>
           )}
-          <Button
-            variant="text"
-            style={styles.editButton}
-            onClick={() => edit(index)}
-          >
-            <EditIcon />
-          </Button>
+          {canEdit && (
+            <Button
+              variant="text"
+              style={styles.editButton}
+              onClick={() => edit(index)}
+            >
+              <EditIcon />
+            </Button>
+          )}
         </div>
       ))}
-      <Button style={styles.addButton} onClick={addInput}>
-        <AddIcon /> Add Hobby
-      </Button>
+
+      {canEdit && (
+        <Button style={styles.addButton} onClick={addInput}>
+          <AddIcon /> Add Hobby
+        </Button>
+      )}
     </>
   );
 };

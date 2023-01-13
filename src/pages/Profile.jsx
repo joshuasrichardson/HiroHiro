@@ -15,8 +15,6 @@ const Profile = ({ navigation, route }) => {
   const { user } = useContext(AppContext);
   const { profileUser } = route.params;
 
-  console.log("user", user);
-  console.log("profileUser", profileUser);
   const [nationality, setNationality] = useState(profileUser.nationality);
   const [nativeLanguage, setNativeLanguage] = useState(
     profileUser.nativeLanguage
@@ -88,6 +86,9 @@ const Profile = ({ navigation, route }) => {
             canEdit={user.id === profileUser.id}
           />
         </View>
+        <button onClick={() => navigation.navigate("UserList")}>
+          See Users
+        </button>
       </ScrollView>
     </SafeAreaView>
   );

@@ -72,11 +72,34 @@ const setUserAttribute = async (id, attribute, value, version) => {
   }
 };
 
+const getUser = (id) => {
+  return {
+    email: `friend${id}@gmail.com`,
+    firstName: `Friend`,
+    lastName: `${id}`,
+    nativeLanguage: "Good Language",
+    learningLanguage: "Better Language",
+    pictureURLs: "",
+    nationality: "Korean",
+    languageLevel: "10",
+    languageGoals: ["Be the best"],
+    hobbies: ["Chess"],
+  };
+};
+
+const getUsers = () => {
+  return Array.from({ length: 20 }, () =>
+    getUser(Math.floor(Math.random() * 1000))
+  );
+};
+
 const ServerFacade = {
   register,
   confirmSignUp,
   login,
   setUserAttribute,
+  getUser,
+  getUsers,
 };
 
 export default ServerFacade;
