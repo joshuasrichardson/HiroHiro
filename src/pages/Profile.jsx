@@ -10,10 +10,16 @@ import { AppContext } from "../../App";
 import React, { useState, useContext } from "react";
 import HHField from "../components/HHField";
 import HHListField from "../components/HHListField";
+import GestureRecognizer from "react-native-swipe-gestures";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import Fade from "@mui/material/Fade";
+import ServerFacade from "../api/ServerFacade";
 
 const Profile = ({ navigation, route }) => {
   const { user } = useContext(AppContext);
   const { profileUser } = route.params;
+  console.log(profileUser);
 
   const [nationality, setNationality] = useState(profileUser.nationality);
   const [nativeLanguage, setNativeLanguage] = useState(
@@ -25,72 +31,128 @@ const Profile = ({ navigation, route }) => {
   const [languageLevel, setLanguageLevel] = useState(profileUser.languageLevel);
   const [hobbies, setHobbies] = useState(profileUser.hobbies);
   const [languageGoals, setLanguageGoals] = useState(profileUser.languageGoals);
+  const [isShowingCheck, setIsShowingCheck] = useState(false);
+  const [isShowingX, setIsShowingX] = useState(false);
+
+  const onSwipeLeft = () => {
+    if (user.id !== profileUser.id) {
+      ServerFacade.dismissUser(user, profileUser);
+      setIsShowingX(true);
+      setTimeout(() => setIsShowingX(false), 2000);
+    }
+  };
+
+  const onSwipeRight = () => {
+    if (user.id !== profileUser.id) {
+      ServerFacade.addFriend(user, profileUser);
+      setIsShowingCheck(true);
+      setTimeout(() => setIsShowingCheck(false), 2000);
+    }
+  };
+
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+    gestureIsClickThreshold: 180,
+  };
 
   return (
-    <SafeAreaView style={styles.outerContainer}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={require("../../assets/guy.png")}
-            style={styles.image}
-          />
-        </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>
-            {profileUser.firstName + " " + profileUser.lastName}
-          </Text>
-        </View>
-        <View contentContainerStyle={styles.textContainer}>
-          <Text style={styles.header}>Email:</Text>
-          <Text style={styles.text}>{profileUser.email}</Text>
-          <Text style={styles.header}>Nationality:</Text>
-          <HHField
-            value={nationality}
-            setValue={setNationality}
-            attribute="nationality"
-            canEdit={user.id === profileUser.id}
-          />
-          <Text style={styles.header}>Native Language:</Text>
-          <HHField
-            value={nativeLanguage}
-            setValue={setNativeLanguage}
-            attribute="nativeLanguage"
-            canEdit={user.id === profileUser.id}
-          />
-          <Text style={styles.header}>Studying:</Text>
-          <HHField
-            value={learningLanguage}
-            setValue={setLearningLanguage}
-            attribute="learningLanguage"
-            canEdit={user.id === profileUser.id}
-          />
-          <Text style={styles.header}>Language Level:</Text>
-          <HHField
-            value={languageLevel}
-            setValue={setLanguageLevel}
-            attribute="languageLevel"
-            canEdit={user.id === profileUser.id}
-          />
-          <Text style={styles.header}>Hobbies:</Text>
-          <HHListField
-            values={hobbies}
-            setValues={setHobbies}
-            attribute="hobbies"
-            canEdit={user.id === profileUser.id}
-          />
-          <Text style={styles.header}>Language Goals:</Text>
-          <HHListField
-            values={languageGoals}
-            setValues={setLanguageGoals}
-            attribute="languageGoals"
-            canEdit={user.id === profileUser.id}
-          />
-        </View>
-        <button onClick={() => navigation.navigate("UserList")}>
-          See Users
-        </button>
-      </ScrollView>
-    </SafeAreaView>
+    <GestureRecognizer
+      onSwipeLeft={(state) => onSwipeLeft(state)}
+      onSwipeRight={(state) => onSwipeRight(state)}
+      config={config}
+    >
+      <SafeAreaView style={styles.outerContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={require("../../assets/JoshuaSan.jpg")}
+              style={styles.image}
+            />
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>
+              {profileUser.firstName + " " + profileUser.lastName}
+            </Text>
+          </View>
+          <View contentContainerStyle={styles.textContainer}>
+            <Text style={styles.header}>Email:</Text>
+            <Text style={styles.text}>{profileUser.email}</Text>
+            <Text style={styles.header}>Nationality:</Text>
+            <HHField
+              value={nationality}
+              setValue={setNationality}
+              attribute="nationality"
+              canEdit={user.id === profileUser.id}
+            />
+            <Text style={styles.header}>Native Language:</Text>
+            <HHField
+              value={nativeLanguage}
+              setValue={setNativeLanguage}
+              attribute="nativeLanguage"
+              canEdit={user.id === profileUser.id}
+            />
+            <Text style={styles.header}>Studying:</Text>
+            <HHField
+              value={learningLanguage}
+              setValue={setLearningLanguage}
+              attribute="learningLanguage"
+              canEdit={user.id === profileUser.id}
+            />
+            <Text style={styles.header}>Language Level:</Text>
+            <HHField
+              value={languageLevel}
+              setValue={setLanguageLevel}
+              attribute="languageLevel"
+              canEdit={user.id === profileUser.id}
+            />
+            <Text style={styles.header}>Hobbies:</Text>
+            <HHListField
+              values={hobbies}
+              setValues={setHobbies}
+              attribute="hobbies"
+              canEdit={user.id === profileUser.id}
+            />
+            <Text style={styles.header}>Language Goals:</Text>
+            <HHListField
+              values={languageGoals}
+              setValues={setLanguageGoals}
+              attribute="languageGoals"
+              canEdit={user.id === profileUser.id}
+            />
+          </View>
+          <button onClick={() => navigation.navigate("UserList")}>
+            See Users
+          </button>
+          <Fade in={isShowingCheck}>
+            <CheckCircleIcon
+              style={{
+                display: "float",
+                position: "fixed",
+                top: "25vh",
+                left: "25%",
+                width: "50%",
+                height: "50%",
+                color: "green",
+              }}
+            />
+          </Fade>
+          <Fade in={isShowingX}>
+            <CancelIcon
+              style={{
+                display: "float",
+                position: "fixed",
+                top: "25vh",
+                left: "25%",
+                width: "50%",
+                height: "50%",
+                color: "red",
+              }}
+            />
+          </Fade>
+        </ScrollView>
+      </SafeAreaView>
+    </GestureRecognizer>
   );
 };
 

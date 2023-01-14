@@ -93,6 +93,26 @@ const getUsers = () => {
   );
 };
 
+const addFriend = async (user, profileUser) => {
+  console.log(
+    user.firstName,
+    user.lastName,
+    "added",
+    profileUser.firstName,
+    profileUser.lastName
+  );
+};
+
+const dismissUser = async (user, profileUser) => {
+  console.log(
+    user.firstName,
+    user.lastName,
+    "dismissed",
+    profileUser.firstName,
+    profileUser.lastName
+  );
+};
+
 const ServerFacade = {
   register,
   confirmSignUp,
@@ -100,6 +120,8 @@ const ServerFacade = {
   setUserAttribute,
   getUser,
   getUsers,
+  addFriend,
+  dismissUser,
 };
 
 export default ServerFacade;

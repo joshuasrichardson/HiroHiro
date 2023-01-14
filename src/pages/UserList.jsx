@@ -16,6 +16,7 @@ const UserList = ({ navigation }) => {
   }, []);
 
   const viewProfile = (user) => {
+    console.log(user);
     navigation.navigate("Profile", { profileUser: user });
   };
 
