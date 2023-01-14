@@ -3,7 +3,8 @@ import { StyleSheet, TextInput, Platform, View } from "react-native";
 import HHButton from "../components/HHButton";
 import HHView from "../components/HHView";
 import ServerFacade from "../api/ServerFacade";
-import { AppContext } from "../../App";
+import AppContext from "../components/AppContext";
+import { primaryOrange } from "../styles";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -11,7 +12,7 @@ const Register = ({ navigation }) => {
 
   const { setUser } = useContext(AppContext);
 
-  async function register() {
+  const register = async () => {
     try {
       const user = await ServerFacade.register(email, password, email);
       if (user) {
@@ -23,7 +24,7 @@ const Register = ({ navigation }) => {
     } catch (err) {
       console.log("TODO: Show error message to user");
     }
-  }
+  };
 
   return (
     <HHView>
@@ -52,7 +53,7 @@ const Register = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: "orange",
+    backgroundColor: primaryOrange,
     paddingTop: Platform.OS === "ios" ? 44 : 0,
   },
   headerTitle: {
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignSelf: "center",
-    backgroundColor: "orange",
+    backgroundColor: primaryOrange,
     borderRadius: 99,
     paddingHorizontal: 8,
   },

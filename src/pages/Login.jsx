@@ -3,7 +3,8 @@ import { StyleSheet, TextInput, Platform, View } from "react-native";
 import HHButton from "../components/HHButton";
 import HHView from "../components/HHView";
 import ServerFacade from "../api/ServerFacade";
-import { AppContext } from "../../App";
+import AppContext from "../components/AppContext";
+import { primaryOrange } from "../styles";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -45,7 +46,7 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: "orange",
+    backgroundColor: primaryOrange,
     paddingTop: Platform.OS === "ios" ? 44 : 0,
   },
   headerTitle: {
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignSelf: "center",
-    backgroundColor: "orange",
+    backgroundColor: primaryOrange,
     borderRadius: 99,
     paddingHorizontal: 8,
   },

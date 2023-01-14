@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { AppContext } from "../../App";
+import AppContext from "../components/AppContext";
 import React, { useState, useContext } from "react";
 import HHField from "../components/HHField";
 import HHListField from "../components/HHListField";
@@ -15,6 +15,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Fade from "@mui/material/Fade";
 import ServerFacade from "../api/ServerFacade";
+import { primaryOrange } from "../styles";
 
 const Profile = ({ navigation, route }) => {
   const { user } = useContext(AppContext);
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
   image: {
     width: "90%",
     height: "100%",
-    borderColor: "orange",
+    borderColor: primaryOrange,
     borderWidth: 5,
     borderRadius: 20,
     border: "solid",

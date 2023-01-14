@@ -4,7 +4,7 @@ import ServerFacade from "../api/ServerFacade";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import { ClickAwayListener } from "@mui/material";
-import { AppContext } from "../../App";
+import AppContext from "./AppContext";
 
 const HHField = ({ attribute, value, setValue, canEdit }) => {
   const [editing, setEditing] = useState(false);

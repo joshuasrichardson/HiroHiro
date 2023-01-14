@@ -3,6 +3,7 @@ import { StyleSheet, TextInput, Platform, View } from "react-native";
 import HHButton from "../components/HHButton";
 import HHView from "../components/HHView";
 import ServerFacade from "../api/ServerFacade";
+import { primaryOrange } from "../styles";
 
 const ConfirmSignUp = ({ navigation, route }) => {
   const [email, setEmail] = useState(route.params.email);
@@ -40,7 +41,7 @@ const ConfirmSignUp = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: "orange",
+    backgroundColor: primaryOrange,
     paddingTop: Platform.OS === "ios" ? 44 : 0,
   },
   headerTitle: {
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignSelf: "center",
-    backgroundColor: "orange",
+    backgroundColor: primaryOrange,
     borderRadius: 99,
     paddingHorizontal: 8,
   },

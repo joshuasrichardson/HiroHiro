@@ -4,7 +4,7 @@ import ServerFacade from "../api/ServerFacade";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
-import { AppContext } from "../../App";
+import AppContext from "./AppContext";
 
 const HHListField = ({ attribute, values, setValues, canEdit }) => {
   const [editing, setEditing] = useState(-1);
