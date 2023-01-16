@@ -38,7 +38,8 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   image: {
     width: "100%",
-    height: "28%",
+    height: "25%",
+    objectFit: "contain",
   },
   flexRow: {
     flexDirection: "row",

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import AppContext from "../components/AppContext";
 import React, { useState, useContext } from "react";
+import HHButton from "../components/HHButton";
 import HHField from "../components/HHField";
 import HHListField from "../components/HHListField";
 import GestureRecognizer from "react-native-swipe-gestures";
@@ -19,6 +20,7 @@ import { primaryOrange } from "../styles";
 
 const Profile = ({ navigation, route }) => {
   const { user } = useContext(AppContext);
+  console.log("Route:", route);
   const { profileUser } = route.params;
   console.log(profileUser);
 
@@ -62,6 +64,7 @@ const Profile = ({ navigation, route }) => {
       onSwipeLeft={(state) => onSwipeLeft(state)}
       onSwipeRight={(state) => onSwipeRight(state)}
       config={config}
+      style={styles.outerContainer}
     >
       <SafeAreaView style={styles.outerContainer}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -122,9 +125,6 @@ const Profile = ({ navigation, route }) => {
               canEdit={user.id === profileUser.id}
             />
           </View>
-          <button onClick={() => navigation.navigate("UserList")}>
-            See Users
-          </button>
           <Fade in={isShowingCheck}>
             <CheckCircleIcon
               style={{
@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingTop: 20,
   },
-  editButton: {},
   header: {
     fontSize: "20px",
     fontWeight: "bold",

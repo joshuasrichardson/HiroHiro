@@ -16,11 +16,13 @@ const Login = ({ navigation }) => {
     try {
       const user = await ServerFacade.login(email, password);
       if (user) {
+        console.log(user);
         setUser(user);
-        navigation.navigate("Profile", { profileUser: user });
+        navigation.navigate("LoggedInTabs", { profileUser: user });
       }
     } catch (err) {
       console.log("TODO: Show error message to user");
+      console.log(err);
     }
   };
 
