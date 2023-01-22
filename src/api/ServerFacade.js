@@ -1,8 +1,5 @@
-import { Auth } from "aws-amplify";
-import { DataStore } from "aws-amplify";
-import { User } from "../models";
-import { API, graphqlOperation } from "aws-amplify";
-import { userByEmail } from "../graphql/queries";
+import { API, Auth, graphqlOperation } from "aws-amplify";
+import { userByEmail, listUsers } from "../graphql/queries";
 import { updateUser } from "../graphql/mutations";
 
 const register = async (username, password, email) => {
@@ -72,14 +69,19 @@ const setUserAttribute = async (id, attribute, value, version) => {
   }
 };
 
+const getUnseenUsers = async (id) => {
+  return Array.from({ length: 20 }, () => getUser());
+};
+
 const getUser = (id) => {
+  if (!id) id = Math.floor(Math.random() * 1000);
   return {
     email: `friend${id}@gmail.com`,
     firstName: `Friend`,
     lastName: `${id}`,
     nativeLanguage: "Good Language",
     learningLanguage: "Better Language",
-    pictureURLs: "",
+    pictureURLs: "../../assets/guy.png",
     nationality: "Korean",
     languageLevel: "10",
     languageGoals: ["Be the best"],
@@ -87,10 +89,17 @@ const getUser = (id) => {
   };
 };
 
-const getUsers = () => {
-  return Array.from({ length: 20 }, () =>
-    getUser(Math.floor(Math.random() * 1000))
-  );
+const getFriends = async (id) => {
+  try {
+    const result = await API.graphql({
+      query: listUsers,
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    console.log(result);
+    return result.data.listUsers.items;
+  } catch (error) {
+    console.log("Error getting users: ", error);
+  }
 };
 
 const addFriend = async (user, profileUser) => {
@@ -118,8 +127,9 @@ const ServerFacade = {
   confirmSignUp,
   login,
   setUserAttribute,
+  getUnseenUsers,
   getUser,
-  getUsers,
+  getFriends,
   addFriend,
   dismissUser,
 };

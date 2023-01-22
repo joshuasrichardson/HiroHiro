@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import AppContext from "../components/AppContext";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -10,29 +11,30 @@ import ServerFacade from "../api/ServerFacade";
 
 const UserList = ({ navigation }) => {
   const [users, setUsers] = useState([]);
+  const { user } = useContext(AppContext);
 
   useEffect(() => {
-    setUsers(ServerFacade.getUsers());
+    const setup = async () => setUsers(await ServerFacade.getFriends(user.id));
+    setup();
   }, []);
 
-  const viewProfile = (user) => {
-    console.log(user);
-    navigation.navigate("OtherProfile", { profileUser: user });
+  const viewProfile = (profileUser) => {
+    navigation.navigate("OtherProfile", { profileUser });
   };
 
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-      {users.map((user) => (
-        <React.Fragment key={user.email}>
-          <ListItem alignItems="flex-start" onClick={() => viewProfile(user)}>
+      {users?.map((u) => (
+        <React.Fragment key={u.email}>
+          <ListItem alignItems="flex-start" onClick={() => viewProfile(u)}>
             <ListItemAvatar>
               <Avatar
-                alt={`${user.firstName} ${user.lastName}`}
+                alt={`${u.firstName} ${u.lastName}`}
                 src="../../assetsJoshuaSan.jpg"
               />
             </ListItemAvatar>
             <ListItemText
-              primary={`${user.firstName} ${user.lastName}`}
+              primary={`${u.firstName} ${u.lastName}`}
               secondary={
                 <React.Fragment>
                   <Typography
@@ -41,7 +43,7 @@ const UserList = ({ navigation }) => {
                     variant="body2"
                     color="text.primary"
                   >
-                    {user.email}
+                    {u.email}
                   </Typography>
                 </React.Fragment>
               }

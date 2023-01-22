@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     justifyContent: "space-between",
+    width: "100%",
   },
   header: {
     fontSize: "20px",
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: "20px",
+    width: "80%",
     padding: 10,
   },
   addButton: { color: "black", width: "fit-content", paddingLeft: 10 },

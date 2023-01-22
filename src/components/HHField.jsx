@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     justifyContent: "space-between",
+    width: "100%",
   },
   header: {
     fontSize: "20px",

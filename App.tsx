@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Amplify, API, graphqlOperation } from "aws-amplify";
+import React, { useState } from "react";
+import { Amplify } from "aws-amplify";
 import awsconfig from "./src/aws-exports";
 import Home from "./src/pages/Home";
 import Profile from "./src/pages/Profile";
@@ -11,15 +11,10 @@ import AppContext from "./src/components/AppContext";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  Paper,
-  Tabs,
-} from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupIcon from "@mui/icons-material/Group";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import ServerFacade from "./src/api/ServerFacade";
 
 Amplify.configure(awsconfig);
 
@@ -28,26 +23,36 @@ const Tab = createBottomTabNavigator();
 
 const LoggedInTabs = ({ route }) => {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: [{ display: "flex" }, null],
+        tabBarActiveTintColor: "primary",
+      }}
+    >
+      <Tab.Screen
         name="Profile"
         component={Profile}
         initialParams={route.params}
-        options={{ tabBarIcon: () => <PersonIcon />, cardStyle: { flex: 1 } }}
+        options={{
+          tabBarIcon: ({ color }) => <PersonIcon color={color} />,
+        }}
       />
-      <Stack.Screen
+      <Tab.Screen
         name="UserList"
         component={UserList}
         initialParams={route.params}
-        options={{ tabBarIcon: () => <GroupIcon />, cardStyle: { flex: 1 } }}
+        options={{
+          tabBarIcon: ({ color }) => <GroupIcon color={color} />,
+        }}
       />
-      <Stack.Screen
+      <Tab.Screen
         name="OtherProfile"
         component={Profile}
-        initialParams={route.params}
+        initialParams={{ ...route.params, profileUser: ServerFacade.getUser() }}
         options={{
-          tabBarIcon: () => <TravelExploreIcon />,
-          cardStyle: { flex: 1 },
+          tabBarIcon: ({ color }) => <TravelExploreIcon color={color} />,
         }}
       />
     </Tab.Navigator>

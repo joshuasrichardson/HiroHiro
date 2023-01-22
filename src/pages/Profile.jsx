@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import AppContext from "../components/AppContext";
 import React, { useState, useContext } from "react";
-import HHButton from "../components/HHButton";
 import HHField from "../components/HHField";
 import HHListField from "../components/HHListField";
 import GestureRecognizer from "react-native-swipe-gestures";
@@ -20,9 +19,7 @@ import { primaryOrange } from "../styles";
 
 const Profile = ({ navigation, route }) => {
   const { user } = useContext(AppContext);
-  console.log("Route:", route);
   const { profileUser } = route.params;
-  console.log(profileUser);
 
   const [nationality, setNationality] = useState(profileUser.nationality);
   const [nativeLanguage, setNativeLanguage] = useState(
@@ -41,7 +38,10 @@ const Profile = ({ navigation, route }) => {
     if (user.id !== profileUser.id) {
       ServerFacade.dismissUser(user, profileUser);
       setIsShowingX(true);
-      setTimeout(() => setIsShowingX(false), 2000);
+      navigation.navigate("OtherProfile", {
+        profileUser: ServerFacade.getUser(),
+      });
+      setTimeout(() => setIsShowingX(false), 1000);
     }
   };
 
@@ -49,7 +49,10 @@ const Profile = ({ navigation, route }) => {
     if (user.id !== profileUser.id) {
       ServerFacade.addFriend(user, profileUser);
       setIsShowingCheck(true);
-      setTimeout(() => setIsShowingCheck(false), 2000);
+      navigation.navigate("OtherProfile", {
+        profileUser: ServerFacade.getUser(),
+      });
+      setTimeout(() => setIsShowingCheck(false), 1000);
     }
   };
 
@@ -58,6 +61,11 @@ const Profile = ({ navigation, route }) => {
     directionalOffsetThreshold: 80,
     gestureIsClickThreshold: 180,
   };
+
+  const pictureUrl = user.pictureUrls?.length
+    ? require("../../assets/JoshuaSan.jpg")
+    : // ? require(user.pictureUrls[0])
+      require("../../assets/JoshuaSan.jpg");
 
   return (
     <GestureRecognizer
@@ -69,17 +77,14 @@ const Profile = ({ navigation, route }) => {
       <SafeAreaView style={styles.outerContainer}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.imageContainer}>
-            <Image
-              source={require("../../assets/JoshuaSan.jpg")}
-              style={styles.image}
-            />
+            <Image source={pictureUrl} style={styles.image} />
           </View>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>
               {profileUser.firstName + " " + profileUser.lastName}
             </Text>
           </View>
-          <View contentContainerStyle={styles.textContainer}>
+          <View style={styles.textContainer}>
             <Text style={styles.header}>Email:</Text>
             <Text style={styles.text}>{profileUser.email}</Text>
             <Text style={styles.header}>Nationality:</Text>
@@ -182,6 +187,8 @@ const styles = StyleSheet.create({
     display: "flex",
     padding: 30,
     alignItems: "flex-start",
+    flex: 1,
+    width: "100%",
   },
   scrollContainer: {
     display: "flex",

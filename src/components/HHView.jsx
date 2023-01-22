@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-around",
-    // backgroundColor: "white",
     flex: 1,
     padding: 20,
   },
