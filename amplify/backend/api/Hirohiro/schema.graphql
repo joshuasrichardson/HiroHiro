@@ -19,3 +19,21 @@ type User
   languageGoals: [String]
   hobbies: [String]
 }
+
+type UserRelationship
+  @model
+  @auth(
+    rules: [
+      { allow: owner, operations: [create, delete, update, read] }
+      { allow: private, operations: [create, delete, update, read] }
+    ]
+  ) {
+  userId: ID! @primaryKey(sortKeyFields: ["otherUserId"])
+  otherUserId: ID!
+    @index(
+      name: "byOtherUserId"
+      queryField: "relationshipByOtherUserId"
+      sortKeyFields: ["userId"]
+    )
+  status: String
+}

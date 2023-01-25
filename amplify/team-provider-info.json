@@ -24,6 +24,9 @@
           "deploymentBucketName": "amplify-hirohiro-staging-53353-deployment",
           "s3Key": "amplify-builds/hirohiro32a1a241CustomMessage-335973362b6443656234-build.zip"
         }
+      },
+      "storage": {
+        "s3hirohirostoragecbb78688": {}
       }
     }
   }

@@ -1,26 +1,17 @@
 {
   "api": {
     "Hirohiro": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
-          "category": "auth",
-          "resourceName": "hirohiro32a1a241",
           "attributes": [
             "UserPoolId"
-          ]
+          ],
+          "category": "auth",
+          "resourceName": "hirohiro32a1a241"
         }
       ],
       "output": {
         "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "API_KEY",
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 30,
-              "description": "This is an api key"
-            }
-          },
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AWS_IAM"
@@ -31,55 +22,57 @@
                 "userPoolId": "authhirohiro32a1a241"
               }
             }
-          ]
+          ],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "This is an api key"
+            },
+            "authenticationType": "API_KEY"
+          }
         }
-      }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
     }
   },
   "auth": {
     "hirohiro32a1a241": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
+      "customAuth": false,
       "dependsOn": [
         {
-          "category": "function",
-          "resourceName": "hirohiro32a1a241CustomMessage",
-          "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
             "Name"
-          ]
+          ],
+          "category": "function",
+          "resourceName": "hirohiro32a1a241CustomMessage",
+          "triggerProvider": "Cognito"
         }
       ],
-      "customAuth": false,
       "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
         "socialProviders": [],
         "usernameAttributes": [
           "EMAIL",
           "PHONE_NUMBER"
         ],
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyMinLength": 8,
-          "passwordPolicyCharacters": []
-        },
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
         "verificationMechanisms": [
           "EMAIL"
         ]
-      }
-    }
-  },
-  "storage": {
-    "s3hirohirostoragecbb78688": {
-      "service": "S3",
+      },
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "Cognito"
     }
   },
   "function": {
@@ -87,6 +80,13 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "storage": {
+    "s3hirohirostoragecbb78688": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
     }
   }
 }
