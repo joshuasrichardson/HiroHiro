@@ -2,6 +2,8 @@
   "AppSyncApiName": "Hirohiro",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
+  "CreateAPIKey": 0,
+  "APIKeyExpirationEpoch": -1,
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
       "authhirohiro32a1a241",

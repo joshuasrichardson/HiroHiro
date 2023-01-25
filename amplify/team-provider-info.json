@@ -27,6 +27,9 @@
       },
       "storage": {
         "s3hirohirostoragecbb78688": {}
+      },
+      "api": {
+        "Hirohiro": {}
       }
     }
   }

@@ -82,6 +82,32 @@
       "service": "Lambda"
     }
   },
+  "parameters": {
+    "AMPLIFY_function_hirohiro32a1a241CustomMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hirohiro32a1a241CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_hirohiro32a1a241CustomMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hirohiro32a1a241CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_hirohiro32a1a241PostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hirohiro32a1a241PostConfirmation"
+        }
+      ]
+    }
+  },
   "storage": {
     "s3hirohirostoragecbb78688": {
       "dependsOn": [],

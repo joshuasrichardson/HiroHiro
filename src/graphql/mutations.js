@@ -79,3 +79,57 @@ export const deleteUser = /* GraphQL */ `
     }
   }
 `;
+export const createUserRelationship = /* GraphQL */ `
+  mutation CreateUserRelationship(
+    $input: CreateUserRelationshipInput!
+    $condition: ModelUserRelationshipConditionInput
+  ) {
+    createUserRelationship(input: $input, condition: $condition) {
+      userId
+      otherUserId
+      status
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const updateUserRelationship = /* GraphQL */ `
+  mutation UpdateUserRelationship(
+    $input: UpdateUserRelationshipInput!
+    $condition: ModelUserRelationshipConditionInput
+  ) {
+    updateUserRelationship(input: $input, condition: $condition) {
+      userId
+      otherUserId
+      status
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const deleteUserRelationship = /* GraphQL */ `
+  mutation DeleteUserRelationship(
+    $input: DeleteUserRelationshipInput!
+    $condition: ModelUserRelationshipConditionInput
+  ) {
+    deleteUserRelationship(input: $input, condition: $condition) {
+      userId
+      otherUserId
+      status
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;

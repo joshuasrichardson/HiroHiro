@@ -133,3 +133,113 @@ export const userByEmail = /* GraphQL */ `
     }
   }
 `;
+export const getUserRelationship = /* GraphQL */ `
+  query GetUserRelationship($userId: ID!, $otherUserId: ID!) {
+    getUserRelationship(userId: $userId, otherUserId: $otherUserId) {
+      userId
+      otherUserId
+      status
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const listUserRelationships = /* GraphQL */ `
+  query ListUserRelationships(
+    $userId: ID
+    $otherUserId: ModelIDKeyConditionInput
+    $filter: ModelUserRelationshipFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listUserRelationships(
+      userId: $userId
+      otherUserId: $otherUserId
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        userId
+        otherUserId
+        status
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncUserRelationships = /* GraphQL */ `
+  query SyncUserRelationships(
+    $filter: ModelUserRelationshipFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUserRelationships(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        userId
+        otherUserId
+        status
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const relationshipByOtherUserId = /* GraphQL */ `
+  query RelationshipByOtherUserId(
+    $otherUserId: ID!
+    $userId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserRelationshipFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    relationshipByOtherUserId(
+      otherUserId: $otherUserId
+      userId: $userId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        userId
+        otherUserId
+        status
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
