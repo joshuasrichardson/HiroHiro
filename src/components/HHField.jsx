@@ -1,10 +1,8 @@
-import { StyleSheet, Text, TextInput } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState, useEffect, useRef, useContext } from "react";
 import ServerFacade from "../api/ServerFacade";
-import EditIcon from "@mui/icons-material/Edit";
-import Button from "@mui/material/Button";
-import { ClickAwayListener } from "@mui/material";
 import AppContext from "./AppContext";
+import { IconButton } from "react-native-paper";
 
 const HHField = ({ attribute, value, setValue, canEdit }) => {
   const [editing, setEditing] = useState(false);
@@ -37,7 +35,7 @@ const HHField = ({ attribute, value, setValue, canEdit }) => {
     setValue(v);
   };
 
-  const handleFocus = (e) => e.target.select();
+  const handleFocus = (e) => e.target.focus();
 
   const getValueText = () => {
     return <Text style={styles.text}>{value}</Text>;
@@ -45,7 +43,7 @@ const HHField = ({ attribute, value, setValue, canEdit }) => {
 
   const getValueInputText = () => {
     return (
-      <ClickAwayListener onClickAway={() => setEditing(false)}>
+      <Pressable onPressOut={() => setEditing(false)}>
         <TextInput
           ref={inputRef}
           id={`input-${attribute}`}
@@ -55,7 +53,7 @@ const HHField = ({ attribute, value, setValue, canEdit }) => {
           onBlur={onBlur}
           onFocus={handleFocus}
         />
-      </ClickAwayListener>
+      </Pressable>
     );
   };
 
@@ -64,27 +62,27 @@ const HHField = ({ attribute, value, setValue, canEdit }) => {
   };
 
   return (
-    <>
-      <div style={styles.container}>
-        {editing ? getValueInputText() : getValueText()}
-        {canEdit && (
-          <Button
-            variant="text"
-            key={attribute}
-            style={styles.editButton}
-            onClick={edit}
-          >
-            <EditIcon />
-          </Button>
-        )}
-      </div>
-    </>
+    <View style={styles.container}>
+      {editing ? getValueInputText() : getValueText()}
+      {canEdit && (
+        <IconButton
+          variant="text"
+          key={attribute}
+          style={styles.editButton}
+          onPress={edit}
+          icon="pencil"
+          iconColor={styles.editButton.color}
+          size={20}
+        />
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
   },
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     padding: 10,
   },
-  editButton: { color: "black", width: "20%" },
+  editButton: { color: "black" },
 });
 
 export default HHField;

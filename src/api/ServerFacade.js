@@ -1,6 +1,14 @@
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import { userByEmail, listUsers } from "../graphql/queries";
-import { updateUser } from "../graphql/mutations";
+import {
+  userByEmail,
+  listUsers,
+  listUserRelationships,
+} from "../graphql/queries";
+import {
+  updateUser,
+  updateUserRelationship,
+  createUserRelationship,
+} from "../graphql/mutations";
 
 const register = async (username, password, email) => {
   try {
@@ -69,40 +77,186 @@ const setUserAttribute = async (id, attribute, value, version) => {
   }
 };
 
-const getUnseenUsers = async (id) => {
-  return Array.from({ length: 20 }, () => getUser());
-};
-
-const getUser = (id) => {
-  if (!id) id = Math.floor(Math.random() * 1000);
-  return {
-    email: `friend${id}@gmail.com`,
-    firstName: `Friend`,
-    lastName: `${id}`,
-    nativeLanguage: "Good Language",
-    learningLanguage: "Better Language",
-    pictureURLs: "../../assets/guy.png",
-    nationality: "Korean",
-    languageLevel: "10",
-    languageGoals: ["Be the best"],
-    hobbies: ["Chess"],
-  };
-};
-
-const getFriends = async (id) => {
+const getAllUsers = async () => {
   try {
     const result = await API.graphql({
       query: listUsers,
+      variables: {},
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-    console.log(result);
+    console.log(result); //todo: filter out friends
     return result.data.listUsers.items;
   } catch (error) {
     console.log("Error getting users: ", error);
   }
 };
 
+const getUnseenUsers = async (userId, friendsIds) => {
+  return (await getAllUsers()).filter(
+    (user) => !friendsIds.some((id) => id === user.id || id === userId)
+  );
+};
+
+const getUser = (id) => {
+  if (!id) id = Math.floor(Math.random() * 1000);
+  return {
+    email: `TanakaFamily${id}@gmail.com`,
+    firstName: `The`,
+    lastName: `Tanaka Family`,
+    nativeLanguage: "Japanese",
+    learningLanguage: "English",
+    pictureURLs: "../../assets/family.png",
+    nationality: "Japanese",
+    languageLevel: "Intermediate",
+    languageGoals: ["Speaking"],
+    hobbies: ["Karate", "Reading", "Fishing", "Swimming"],
+  };
+};
+
+const getFriends = async (id) => {
+  try {
+    const firstResult = await API.graphql({
+      query: listUserRelationships,
+      variables: {
+        input: {
+          userId: id,
+          status: "friends",
+        },
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    console.log(firstResult);
+
+    const secondResult = await API.graphql({
+      query: listUserRelationships,
+      variables: {
+        input: {
+          otherUserId: id,
+          status: "friends",
+        },
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    console.log(secondResult);
+
+    const ids = firstResult.data.listUserRelationships.items.map(
+      (item) => item.otherUserId
+    );
+    ids.push(
+      ...secondResult.data.listUserRelationships.items.map(
+        (item) => item.userId
+      )
+    );
+
+    const allUsers = await getAllUsers();
+    return allUsers.filter((user) => ids.includes(user.id) && user.id !== id);
+
+    // const result = await API.graphql({
+    //   query: listUsers,
+    //   variables: {},
+    //   authMode: "AMAZON_COGNITO_USER_POOLS",
+    // });
+    // console.log(result);
+    // return result.data.listUsers.items;
+  } catch (error) {
+    console.log("Error getting users: ", error);
+  }
+};
+
+const createDummyUsers = async () => {
+  const numUsers = 100;
+
+  for (let i = 0; i < numUsers; i++) {
+    const input = {
+      firstName: `DummyUser${i}`,
+      lastName: `LastName${i}`,
+      email: `dummyuser${i}@example.com`,
+      nativeLanguage: "English",
+      learningLanguage: "Japanese",
+      pictureURLs: [],
+      nationality: "American",
+      languageLevel: "Intermediate",
+      languageGoals: "Improve speaking skills",
+      hobbies: ["reading", "traveling"],
+    };
+
+    try {
+      const response = await API.graphql({
+        query: createUser,
+        variables: { input },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+      console.log(`Created user with id: ${response.data.createUser.id}`);
+    } catch (err) {
+      console.log(`Error creating user: ${err}`);
+    }
+  }
+};
+
+const updateOrCreateUserRelationship = async (input) => {
+  try {
+    // Try to update the UserRelationship
+    const updateResponse = await API.graphql({
+      query: updateUserRelationship,
+      variables: {
+        input,
+        condition: {
+          userId: { eq: input.userId },
+          otherUserId: { eq: input.otherUserId },
+        },
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+
+    // If the update succeeded, return the updated UserRelationship
+    if (updateResponse.updateUserRelationship) {
+      return updateResponse.updateUserRelationship;
+    }
+  } catch (updateError) {
+    // If the update failed, try to create the UserRelationship
+    try {
+      const createResponse = await API.graphql({
+        query: createUserRelationship,
+        variables: {
+          input,
+        },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+
+      // If the create succeeded, return the created UserRelationship
+      if (createResponse.createUserRelationship) {
+        return createResponse.createUserRelationship;
+      }
+    } catch (createError) {
+      // If the create also failed, throw an error
+      console.log(createError);
+      console.log(updateError);
+      // throw new Error(
+      //   `Failed to update or create UserRelationship: ${updateError.toString()}, ${createError.toString()}`
+      // );
+    }
+  }
+};
+
 const addFriend = async (user, profileUser) => {
+  const resp = await updateOrCreateUserRelationship({
+    userId: user.id,
+    otherUserId: profileUser.id,
+    status: "friends",
+  });
+  return resp;
+  const response = await API.graphql({
+    query: updateUserRelationship,
+    variables: {
+      input: {
+        userId: user.id,
+        otherUserId: profileUser.id,
+        status: "friends",
+      },
+    },
+    authMode: "AMAZON_COGNITO_USER_POOLS",
+  });
+  console.log(response);
   console.log(
     user.firstName,
     user.lastName,

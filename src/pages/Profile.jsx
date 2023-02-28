@@ -11,15 +11,36 @@ import React, { useState, useContext } from "react";
 import HHField from "../components/HHField";
 import HHListField from "../components/HHListField";
 import GestureRecognizer from "react-native-swipe-gestures";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
-import Fade from "@mui/material/Fade";
 import ServerFacade from "../api/ServerFacade";
 import { primaryOrange } from "../styles";
+import { Button, Snackbar } from "react-native-paper";
 
 const Profile = ({ navigation, route }) => {
-  const { user } = useContext(AppContext);
-  const { profileUser } = route.params;
+  const { user, friends, unseenUsers } = useContext(AppContext);
+
+  const [visible, setVisible] = useState(false);
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
+
+  const isFriend = (id) => friends.some((f) => f.id === id);
+
+  const getRandomUnseenUser = () => {
+    const i = Math.abs(Math.floor(Math.random() * unseenUsers.length));
+    let u = unseenUsers[i];
+    for (
+      let count = 0;
+      u.id === user.id && isFriend(u.id) && count < 100;
+      count++
+    ) {
+      u = unseenUsers[i];
+      if (count === 98) return null;
+    }
+    return u;
+  };
+
+  const profileUser = route.params.profileUser || getRandomUnseenUser();
 
   const [nationality, setNationality] = useState(profileUser.nationality);
   const [nativeLanguage, setNativeLanguage] = useState(
@@ -31,15 +52,17 @@ const Profile = ({ navigation, route }) => {
   const [languageLevel, setLanguageLevel] = useState(profileUser.languageLevel);
   const [hobbies, setHobbies] = useState(profileUser.hobbies);
   const [languageGoals, setLanguageGoals] = useState(profileUser.languageGoals);
-  const [isShowingCheck, setIsShowingCheck] = useState(false);
-  const [isShowingX, setIsShowingX] = useState(false);
+  // const [isShowingCheck, setIsShowingCheck] = useState(false);
+  // const [isShowingX, setIsShowingX] = useState(false);
 
   const onSwipeLeft = () => {
     if (user.id !== profileUser.id) {
+      if (isFriend(profileUser.id)) return;
       ServerFacade.dismissUser(user, profileUser);
-      setIsShowingX(true);
+      // setIsShowingX(true);
+      onToggleSnackBar();
       navigation.navigate("OtherProfile", {
-        profileUser: ServerFacade.getUser(),
+        profileUser: getRandomUnseenUser(),
       });
       setTimeout(() => setIsShowingX(false), 1000);
     }
@@ -47,10 +70,12 @@ const Profile = ({ navigation, route }) => {
 
   const onSwipeRight = () => {
     if (user.id !== profileUser.id) {
+      if (isFriend(profileUser.id)) return;
       ServerFacade.addFriend(user, profileUser);
-      setIsShowingCheck(true);
+      // setIsShowingCheck(true);
+      onToggleSnackBar();
       navigation.navigate("OtherProfile", {
-        profileUser: ServerFacade.getUser(),
+        profileUser: getRandomUnseenUser(),
       });
       setTimeout(() => setIsShowingCheck(false), 1000);
     }
@@ -65,7 +90,7 @@ const Profile = ({ navigation, route }) => {
   const pictureUrl = user.pictureUrls?.length
     ? require("../../assets/JoshuaSan.jpg")
     : // ? require(user.pictureUrls[0])
-      require("../../assets/JoshuaSan.jpg");
+      require("../../assets/student.jpeg");
 
   return (
     <GestureRecognizer
@@ -75,87 +100,105 @@ const Profile = ({ navigation, route }) => {
       style={styles.outerContainer}
     >
       <SafeAreaView style={styles.outerContainer}>
+        <Snackbar
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: "Undo",
+            onPress: () => {
+              // Do something
+            },
+          }}
+        >
+          Hey there! I'm a Snackbar.
+        </Snackbar>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.imageContainer}>
-            <Image source={pictureUrl} style={styles.image} />
-          </View>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>
-              {profileUser.firstName + " " + profileUser.lastName}
-            </Text>
-          </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.header}>Email:</Text>
-            <Text style={styles.text}>{profileUser.email}</Text>
-            <Text style={styles.header}>Nationality:</Text>
-            <HHField
-              value={nationality}
-              setValue={setNationality}
-              attribute="nationality"
-              canEdit={user.id === profileUser.id}
-            />
-            <Text style={styles.header}>Native Language:</Text>
-            <HHField
-              value={nativeLanguage}
-              setValue={setNativeLanguage}
-              attribute="nativeLanguage"
-              canEdit={user.id === profileUser.id}
-            />
-            <Text style={styles.header}>Studying:</Text>
-            <HHField
-              value={learningLanguage}
-              setValue={setLearningLanguage}
-              attribute="learningLanguage"
-              canEdit={user.id === profileUser.id}
-            />
-            <Text style={styles.header}>Language Level:</Text>
-            <HHField
-              value={languageLevel}
-              setValue={setLanguageLevel}
-              attribute="languageLevel"
-              canEdit={user.id === profileUser.id}
-            />
-            <Text style={styles.header}>Hobbies:</Text>
-            <HHListField
-              values={hobbies}
-              setValues={setHobbies}
-              attribute="hobbies"
-              canEdit={user.id === profileUser.id}
-            />
-            <Text style={styles.header}>Language Goals:</Text>
-            <HHListField
-              values={languageGoals}
-              setValues={setLanguageGoals}
-              attribute="languageGoals"
-              canEdit={user.id === profileUser.id}
-            />
-          </View>
-          <Fade in={isShowingCheck}>
-            <CheckCircleIcon
-              style={{
-                display: "float",
-                position: "fixed",
-                top: "25vh",
-                left: "25%",
-                width: "50%",
-                height: "50%",
-                color: "green",
-              }}
-            />
-          </Fade>
-          <Fade in={isShowingX}>
-            <CancelIcon
-              style={{
-                display: "float",
-                position: "fixed",
-                top: "25vh",
-                left: "25%",
-                width: "50%",
-                height: "50%",
-                color: "red",
-              }}
-            />
-          </Fade>
+          {profileUser ? (
+            <>
+              <View style={styles.imageContainer}>
+                <Image source={pictureUrl} style={styles.image} />
+              </View>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>
+                  {profileUser.firstName + " " + profileUser.lastName}
+                </Text>
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.header}>Nationality:</Text>
+                <HHField
+                  value={nationality}
+                  setValue={setNationality}
+                  attribute="nationality"
+                  canEdit={user.id === profileUser.id}
+                />
+                <Text style={styles.header}>Native Language:</Text>
+                <HHField
+                  value={nativeLanguage}
+                  setValue={setNativeLanguage}
+                  attribute="nativeLanguage"
+                  canEdit={user.id === profileUser.id}
+                />
+                <Text style={styles.header}>Studying:</Text>
+                <HHField
+                  value={learningLanguage}
+                  setValue={setLearningLanguage}
+                  attribute="learningLanguage"
+                  canEdit={user.id === profileUser.id}
+                />
+                <Text style={styles.header}>Language Level:</Text>
+                <HHField
+                  value={languageLevel}
+                  setValue={setLanguageLevel}
+                  attribute="languageLevel"
+                  canEdit={user.id === profileUser.id}
+                />
+                <Text style={styles.header}>Hobbies:</Text>
+                <HHListField
+                  values={hobbies}
+                  setValues={setHobbies}
+                  attribute="hobbies"
+                  canEdit={user.id === profileUser.id}
+                />
+                <Text style={styles.header}>Language Goals:</Text>
+                <HHListField
+                  values={languageGoals}
+                  setValues={setLanguageGoals}
+                  attribute="languageGoals"
+                  canEdit={user.id === profileUser.id}
+                />
+              </View>
+              {/* <Fade in={isShowingCheck}>
+                //TODO
+                <CheckCircleIcon //TODO
+                  style={{
+                    display: "float",
+                    position: "fixed",
+                    top: "25vh",
+                    left: "25%",
+                    width: "50%",
+                    height: "50%",
+                    color: "green",
+                  }}
+                />
+              </Fade> */}
+              {/* <Fade in={isShowingX}>
+                //TODO
+                <CancelIcon //TODO
+                  style={{
+                    display: "float",
+                    position: "fixed",
+                    top: "25vh",
+                    left: "25%",
+                    width: "50%",
+                    height: "50%",
+                    color: "red",
+                  }}
+                />
+              </Fade> */}
+            </>
+          ) : (
+            <Text>No Unseen Users</Text>
+          )}
         </ScrollView>
       </SafeAreaView>
     </GestureRecognizer>

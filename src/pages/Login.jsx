@@ -10,16 +10,25 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setUser } = useContext(AppContext);
+  const { setUser, setUnseenUsers, setFriends } = useContext(AppContext);
 
   const login = async () => {
     try {
       const user = await ServerFacade.login(email, password);
       if (user) {
         setUser(user);
+        const fs = await ServerFacade.getFriends(user.id);
+        setFriends(fs);
+        setUnseenUsers(
+          await ServerFacade.getUnseenUsers(
+            user.id,
+            fs.map((user) => user.id)
+          )
+        );
         navigation.navigate("LoggedInTabs", { profileUser: user });
       }
     } catch (err) {
+      console.log(err);
       console.log("TODO: Show error message to user");
     }
   };

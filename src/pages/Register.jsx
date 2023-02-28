@@ -7,6 +7,8 @@ import AppContext from "../components/AppContext";
 import { primaryOrange } from "../styles";
 
 const Register = ({ navigation }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,6 +20,8 @@ const Register = ({ navigation }) => {
       if (user) {
         navigation.navigate("ConfirmSignUp", { email });
         setUser(user);
+        setFirstName("");
+        setLastName("");
         setEmail("");
         setPassword("");
       }
@@ -30,13 +34,23 @@ const Register = ({ navigation }) => {
     <HHView>
       <View>
         <TextInput
-          onChangeText={setName}
-          placeholder="Name"
+          onChangeText={setFirstName}
+          placeholder="First Name"
+          style={styles.modalInput}
+        />
+        <TextInput
+          onChangeText={setLastName}
+          placeholder="Last Name"
           style={styles.modalInput}
         />
         <TextInput
           onChangeText={setEmail}
           placeholder="Email"
+          style={styles.modalInput}
+        />
+        <TextInput
+          onChangeText={() => {}}
+          placeholder="Phone Number"
           style={styles.modalInput}
         />
         <TextInput

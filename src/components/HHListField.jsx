@@ -1,10 +1,8 @@
-import { StyleSheet, Text, TextInput } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
 import ServerFacade from "../api/ServerFacade";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import Button from "@mui/material/Button";
 import AppContext from "./AppContext";
+import { IconButton } from "react-native-paper";
 
 const HHListField = ({ attribute, values, setValues, canEdit }) => {
   const [editing, setEditing] = useState(-1);
@@ -43,7 +41,7 @@ const HHListField = ({ attribute, values, setValues, canEdit }) => {
     setEditing(-1);
   };
 
-  const handleFocus = (e) => e.target.select();
+  const handleFocus = (e) => e.target.focus();
 
   const edit = (index) => {
     setEditing(index);
@@ -53,7 +51,7 @@ const HHListField = ({ attribute, values, setValues, canEdit }) => {
   return (
     <>
       {values?.map((v, index) => (
-        <div style={styles.container} key={v + index + "-list-field"}>
+        <View style={styles.container} key={v + index + "-list-field"}>
           {editing === index ? (
             <TextInput
               ref={index === editing ? inputRef : null}
@@ -67,21 +65,29 @@ const HHListField = ({ attribute, values, setValues, canEdit }) => {
             <Text style={styles.text}>{v}</Text>
           )}
           {canEdit && (
-            <Button
+            <IconButton
               variant="text"
               style={styles.editButton}
-              onClick={() => edit(index)}
-            >
-              <EditIcon />
-            </Button>
+              onPress={() => edit(index)}
+              icon="pencil"
+              iconColor={styles.editButton.color}
+              size={20}
+            />
           )}
-        </div>
+        </View>
       ))}
 
       {canEdit && (
-        <Button style={styles.addButton} onClick={addInput}>
-          <AddIcon /> Add Hobby
-        </Button>
+        <IconButton
+          variant="text"
+          key={attribute}
+          style={styles.addButton}
+          onPress={addInput}
+          icon="plus"
+          iconColor={styles.addButton.color}
+          size={20}
+        />
+        // {/* <AddIcon /> Add Hobby//TODO */}
       )}
     </>
   );
@@ -90,6 +96,7 @@ const HHListField = ({ attribute, values, setValues, canEdit }) => {
 const styles = StyleSheet.create({
   container: {
     display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
   },
@@ -104,8 +111,8 @@ const styles = StyleSheet.create({
     width: "80%",
     padding: 10,
   },
-  addButton: { color: "black", width: "fit-content", paddingLeft: 10 },
-  editButton: { color: "black", width: "20%" },
+  addButton: { color: "black", paddingLeft: 10 },
+  editButton: { color: "black" },
 });
 
 export default HHListField;
