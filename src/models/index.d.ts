@@ -1,16 +1,16 @@
-import { ModelInit, MutableModel } from "@aws-amplify/datastore";
+import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier, CompositeIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled } from "@aws-amplify/datastore";
 
-type UserMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
 
-type UserRelationshipMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
+
+
 
 type EagerUser = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<User, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly firstName?: string | null;
   readonly lastName?: string | null;
@@ -27,6 +27,10 @@ type EagerUser = {
 }
 
 type LazyUser = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<User, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
   readonly firstName?: string | null;
   readonly lastName?: string | null;
@@ -44,12 +48,15 @@ type LazyUser = {
 
 export declare type User = LazyLoading extends LazyLoadingDisabled ? EagerUser : LazyUser
 
-export declare const User: (new (init: ModelInit<User, UserMetaData>) => User) & {
-  copyOf(source: User, mutator: (draft: MutableModel<User, UserMetaData>) => MutableModel<User, UserMetaData> | void): User;
+export declare const User: (new (init: ModelInit<User>) => User) & {
+  copyOf(source: User, mutator: (draft: MutableModel<User>) => MutableModel<User> | void): User;
 }
 
 type EagerUserRelationship = {
-  readonly id: string;
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<UserRelationship, ['userId', 'otherUserId']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly userId: string;
   readonly otherUserId: string;
   readonly status?: string | null;
@@ -58,7 +65,10 @@ type EagerUserRelationship = {
 }
 
 type LazyUserRelationship = {
-  readonly id: string;
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<UserRelationship, ['userId', 'otherUserId']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly userId: string;
   readonly otherUserId: string;
   readonly status?: string | null;
@@ -68,6 +78,6 @@ type LazyUserRelationship = {
 
 export declare type UserRelationship = LazyLoading extends LazyLoadingDisabled ? EagerUserRelationship : LazyUserRelationship
 
-export declare const UserRelationship: (new (init: ModelInit<UserRelationship, UserRelationshipMetaData>) => UserRelationship) & {
-  copyOf(source: UserRelationship, mutator: (draft: MutableModel<UserRelationship, UserRelationshipMetaData>) => MutableModel<UserRelationship, UserRelationshipMetaData> | void): UserRelationship;
+export declare const UserRelationship: (new (init: ModelInit<UserRelationship>) => UserRelationship) & {
+  copyOf(source: UserRelationship, mutator: (draft: MutableModel<UserRelationship>) => MutableModel<UserRelationship> | void): UserRelationship;
 }

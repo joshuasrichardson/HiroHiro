@@ -151,13 +151,6 @@ export const schema = {
         "UserRelationship": {
             "name": "UserRelationship",
             "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "userId": {
                     "name": "userId",
                     "isArray": false,
@@ -257,5 +250,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.5",
-    "version": "6209c2d8e3ee686536600cacd97c200a"
+    "version": "cf191458905a068a97db2ec8bdab8170"
 };

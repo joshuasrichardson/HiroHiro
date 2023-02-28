@@ -16,13 +16,11 @@ import { primaryOrange } from "../styles";
 import { Button, Snackbar } from "react-native-paper";
 
 const Profile = ({ navigation, route }) => {
-  const { user, friends, unseenUsers } = useContext(AppContext);
+  const { user, friends, setFriends, unseenUsers } = useContext(AppContext);
 
-  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const onToggleSnackBar = () => setVisible(!visible);
-
-  const onDismissSnackBar = () => setVisible(false);
+  const onDismissSnackBar = () => setMessage("");
 
   const isFriend = (id) => friends.some((f) => f.id === id);
 
@@ -52,19 +50,15 @@ const Profile = ({ navigation, route }) => {
   const [languageLevel, setLanguageLevel] = useState(profileUser.languageLevel);
   const [hobbies, setHobbies] = useState(profileUser.hobbies);
   const [languageGoals, setLanguageGoals] = useState(profileUser.languageGoals);
-  // const [isShowingCheck, setIsShowingCheck] = useState(false);
-  // const [isShowingX, setIsShowingX] = useState(false);
 
   const onSwipeLeft = () => {
     if (user.id !== profileUser.id) {
       if (isFriend(profileUser.id)) return;
       ServerFacade.dismissUser(user, profileUser);
-      // setIsShowingX(true);
-      onToggleSnackBar();
+      setMessage(`Dismissed ${profileUser.firstName} ${profileUser.lastName}`);
       navigation.navigate("OtherProfile", {
         profileUser: getRandomUnseenUser(),
       });
-      setTimeout(() => setIsShowingX(false), 1000);
     }
   };
 
@@ -72,25 +66,25 @@ const Profile = ({ navigation, route }) => {
     if (user.id !== profileUser.id) {
       if (isFriend(profileUser.id)) return;
       ServerFacade.addFriend(user, profileUser);
-      // setIsShowingCheck(true);
-      onToggleSnackBar();
+      setFriends([...friends, profileUser]);
+      setMessage(`Added ${profileUser.firstName} ${profileUser.lastName}`);
       navigation.navigate("OtherProfile", {
         profileUser: getRandomUnseenUser(),
       });
-      setTimeout(() => setIsShowingCheck(false), 1000);
     }
   };
 
   const config = {
     velocityThreshold: 0.3,
     directionalOffsetThreshold: 80,
-    gestureIsClickThreshold: 180,
+    gestureIsClickThreshold: 80,
   };
 
-  const pictureUrl = user.pictureUrls?.length
-    ? require("../../assets/JoshuaSan.jpg")
-    : // ? require(user.pictureUrls[0])
-      require("../../assets/student.jpeg");
+  const pictureUrl =
+    profileUser.lastName === "Family"
+      ? require("../../assets/TanakaFamily.png")
+      : // ? require(user.pictureUrls[0])
+        require("../../assets/student.jpeg");
 
   return (
     <GestureRecognizer
@@ -101,16 +95,14 @@ const Profile = ({ navigation, route }) => {
     >
       <SafeAreaView style={styles.outerContainer}>
         <Snackbar
-          visible={visible}
-          onDismiss={onDismissSnackBar}
-          action={{
-            label: "Undo",
-            onPress: () => {
-              // Do something
-            },
+          duration={2000}
+          style={{
+            backgroundColor: message.includes("Added") ? "green" : "red",
           }}
+          visible={!!message}
+          onDismiss={onDismissSnackBar}
         >
-          Hey there! I'm a Snackbar.
+          {message}
         </Snackbar>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {profileUser ? (
@@ -123,6 +115,34 @@ const Profile = ({ navigation, route }) => {
                   {profileUser.firstName + " " + profileUser.lastName}
                 </Text>
               </View>
+              {friends.includes(profileUser) && (
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 20,
+                    marginBottom: -30,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    icon="camera"
+                    mode="contained"
+                    onPress={() => console.log("Pressed")}
+                  >
+                    Call
+                  </Button>
+                  <Button
+                    icon="message"
+                    mode="contained"
+                    onPress={() => console.log("Pressed")}
+                  >
+                    Text
+                  </Button>
+                </View>
+              )}
               <View style={styles.textContainer}>
                 <Text style={styles.header}>Nationality:</Text>
                 <HHField
@@ -167,34 +187,6 @@ const Profile = ({ navigation, route }) => {
                   canEdit={user.id === profileUser.id}
                 />
               </View>
-              {/* <Fade in={isShowingCheck}>
-                //TODO
-                <CheckCircleIcon //TODO
-                  style={{
-                    display: "float",
-                    position: "fixed",
-                    top: "25vh",
-                    left: "25%",
-                    width: "50%",
-                    height: "50%",
-                    color: "green",
-                  }}
-                />
-              </Fade> */}
-              {/* <Fade in={isShowingX}>
-                //TODO
-                <CancelIcon //TODO
-                  style={{
-                    display: "float",
-                    position: "fixed",
-                    top: "25vh",
-                    left: "25%",
-                    width: "50%",
-                    height: "50%",
-                    color: "red",
-                  }}
-                />
-              </Fade> */}
             </>
           ) : (
             <Text>No Unseen Users</Text>

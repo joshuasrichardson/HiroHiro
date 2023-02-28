@@ -43,13 +43,13 @@ const HHField = ({ attribute, value, setValue, canEdit }) => {
 
   const getValueInputText = () => {
     return (
-      <Pressable onPressOut={() => setEditing(false)}>
+      <Pressable onPressOut={() => setEditing(false)} style={{ width: "80%" }}>
         <TextInput
           ref={inputRef}
           id={`input-${attribute}`}
           onChangeText={onChangeText}
           value={value}
-          style={styles.textInput}
+          style={{ ...styles.textInput, width: "100%" }}
           onBlur={onBlur}
           onFocus={handleFocus}
         />
