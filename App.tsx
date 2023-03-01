@@ -10,6 +10,7 @@ import { Amplify } from "aws-amplify";
 import awsconfig from "./src/aws-exports";
 import Home from "./src/pages/Home";
 import Profile from "./src/pages/Profile";
+import UnknownProfile from "./src/pages/UnknownProfile";
 import Login from "./src/pages/Login";
 import ConfirmSignUp from "./src/pages/ConfirmSignUp";
 import UserList from "./src/pages/UserList";
@@ -41,7 +42,6 @@ const LoggedInTabs = ({ route }) => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: [{ display: "flex" }, null],
-        // tabBarActiveTintColor: "primary",
       }}
     >
       <Tab.Screen
@@ -66,7 +66,7 @@ const LoggedInTabs = ({ route }) => {
       />
       <Tab.Screen
         name="OtherProfile"
-        component={Profile}
+        component={UnknownProfile}
         initialParams={{ ...route.params, profileUser: null }}
         options={{
           tabBarIcon: ({ color }) => (
