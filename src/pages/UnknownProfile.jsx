@@ -1,6 +1,5 @@
 import {
   Animated,
-  StyleSheet,
   Text,
   View,
   Image,
@@ -13,10 +12,10 @@ import React, { useState, useRef, useContext } from "react";
 import HHField from "../components/HHField";
 import HHListField from "../components/HHListField";
 import ServerFacade from "../api/ServerFacade";
-import { primaryOrange } from "../styles";
-import { Button, Snackbar } from "react-native-paper";
+import { profileStyles } from "../styles";
+import { Snackbar } from "react-native-paper";
 
-const UnknownProfile = ({ navigation }) => {
+const UnknownProfile = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const { width: windowWidth } = useWindowDimensions();
@@ -24,6 +23,7 @@ const UnknownProfile = ({ navigation }) => {
   const { user, friends, setFriends, unseenUsers } = useContext(AppContext);
 
   const [message, setMessage] = useState("");
+  const [backgroundColor, setBackgroundColor] = useState("white");
 
   const onDismissSnackBar = () => setMessage("");
 
@@ -44,24 +44,13 @@ const UnknownProfile = ({ navigation }) => {
   };
 
   const [profileUser, setProfileUser] = useState(getRandomUnseenUser());
-
-  const [nationality, setNationality] = useState(profileUser.nationality);
-  const [nativeLanguage, setNativeLanguage] = useState(
-    profileUser.nativeLanguage
-  );
-  const [learningLanguage, setLearningLanguage] = useState(
-    profileUser.learningLanguage
-  );
-  const [languageLevel, setLanguageLevel] = useState(profileUser.languageLevel);
-  const [hobbies, setHobbies] = useState(profileUser.hobbies);
-  const [languageGoals, setLanguageGoals] = useState(profileUser.languageGoals);
-
   const [canSwipe, setCanSwipe] = useState(true);
 
   const onSwipeLeft = () => {
     if (!canSwipe) return;
     setCanSwipe(false);
     ServerFacade.dismissUser(user, profileUser);
+    setBackgroundColor("red");
     setMessage(`Dismissed ${profileUser.firstName} ${profileUser.lastName}`);
     setProfileUser(getRandomUnseenUser());
     setTimeout(() => setCanSwipe(true), 1000);
@@ -71,6 +60,7 @@ const UnknownProfile = ({ navigation }) => {
     if (!canSwipe) return;
     ServerFacade.addFriend(user, profileUser);
     setFriends([...friends, profileUser]);
+    setBackgroundColor("green");
     setMessage(`Added ${profileUser.firstName} ${profileUser.lastName}`);
     setProfileUser(getRandomUnseenUser());
     setTimeout(() => setCanSwipe(true), 1000);
@@ -83,11 +73,11 @@ const UnknownProfile = ({ navigation }) => {
         require("../../assets/student.jpeg");
 
   return (
-    <SafeAreaView style={styles.outerContainer}>
+    <SafeAreaView style={profileStyles.outerContainer}>
       <Snackbar
         duration={2000}
         style={{
-          backgroundColor: message.includes("Added") ? "green" : "red",
+          backgroundColor,
         }}
         visible={!!message}
         onDismiss={onDismissSnackBar}
@@ -117,88 +107,30 @@ const UnknownProfile = ({ navigation }) => {
         }}
         scrollEventThrottle={1}
       >
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={profileStyles.scrollContainer}>
           {profileUser ? (
             <>
-              <View style={styles.imageContainer}>
-                <Image source={pictureUrl} style={styles.image} />
+              <View style={profileStyles.imageContainer}>
+                <Image source={pictureUrl} style={profileStyles.image} />
               </View>
-              <View style={styles.titleContainer}>
-                <Text style={styles.title}>
-                  {profileUser.firstName + " " + profileUser.lastName}
+              <View style={profileStyles.titleContainer}>
+                <Text style={profileStyles.title}>
+                  {`${profileUser.firstName} ${profileUser.lastName}`}
                 </Text>
               </View>
-              {friends.includes(profileUser) && (
-                <View
-                  style={{
-                    width: "100%",
-                    marginTop: 20,
-                    marginBottom: -30,
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    icon="camera"
-                    mode="contained"
-                    onPress={() => console.log("Pressed")}
-                  >
-                    Call
-                  </Button>
-                  <Button
-                    icon="message"
-                    mode="contained"
-                    onPress={() => console.log("Pressed")}
-                  >
-                    Text
-                  </Button>
-                </View>
-              )}
-              <View style={styles.textContainer}>
-                <Text style={styles.header}>Nationality:</Text>
-                <HHField
-                  value={nationality}
-                  setValue={setNationality}
-                  attribute="nationality"
-                  canEdit={false}
-                />
-                <Text style={styles.header}>Native Language:</Text>
-                <HHField
-                  value={nativeLanguage}
-                  setValue={setNativeLanguage}
-                  attribute="nativeLanguage"
-                  canEdit={false}
-                />
-                <Text style={styles.header}>Studying:</Text>
-                <HHField
-                  value={learningLanguage}
-                  setValue={setLearningLanguage}
-                  attribute="learningLanguage"
-                  canEdit={false}
-                />
-                <Text style={styles.header}>Language Level:</Text>
-                <HHField
-                  value={languageLevel}
-                  setValue={setLanguageLevel}
-                  attribute="languageLevel"
-                  canEdit={false}
-                />
-                <Text style={styles.header}>Hobbies:</Text>
-                <HHListField
-                  values={hobbies}
-                  setValues={setHobbies}
-                  attribute="hobbies"
-                  canEdit={false}
-                />
-                <Text style={styles.header}>Language Goals:</Text>
-                <HHListField
-                  values={languageGoals}
-                  setValues={setLanguageGoals}
-                  attribute="languageGoals"
-                  canEdit={false}
-                />
+              <View style={profileStyles.textContainer}>
+                <Text style={profileStyles.header}>Nationality:</Text>
+                <HHField value={profileUser.nationality} />
+                <Text style={profileStyles.header}>Native Language:</Text>
+                <HHField value={profileUser.nativeLanguage} />
+                <Text style={profileStyles.header}>Studying:</Text>
+                <HHField value={profileUser.learningLanguage} />
+                <Text style={profileStyles.header}>Language Level:</Text>
+                <HHField value={profileUser.languageLevel} />
+                <Text style={profileStyles.header}>Hobbies:</Text>
+                <HHListField values={profileUser.hobbies} />
+                <Text style={profileStyles.header}>Language Goals:</Text>
+                <HHListField values={profileUser.languageGoals} />
               </View>
             </>
           ) : (
@@ -211,61 +143,3 @@ const UnknownProfile = ({ navigation }) => {
 };
 
 export default UnknownProfile;
-
-const styles = StyleSheet.create({
-  imageContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 300,
-    width: "100%",
-  },
-  image: {
-    width: "90%",
-    height: "100%",
-    borderColor: primaryOrange,
-    borderWidth: 5,
-    borderRadius: 20,
-    border: "solid",
-  },
-  outerContainer: {
-    flex: 1,
-  },
-  textContainer: {
-    display: "flex",
-    padding: 30,
-    alignItems: "flex-start",
-    flex: 1,
-    width: "100%",
-  },
-  scrollContainer: {
-    display: "flex",
-    padding: 20,
-    alignItems: "center",
-  },
-  header: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    padding: 10,
-    paddingTop: 25,
-  },
-  text: {
-    fontSize: "20px",
-    padding: 10,
-  },
-  titleContainer: {
-    display: "flex",
-    alignItems: "center",
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 30,
-    paddingTop: 20,
-  },
-  header: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    padding: 10,
-    paddingTop: 25,
-  },
-});

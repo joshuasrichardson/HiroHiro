@@ -4,7 +4,7 @@ import ServerFacade from "../api/ServerFacade";
 import AppContext from "./AppContext";
 import { IconButton } from "react-native-paper";
 
-const HHField = ({ attribute, value, setValue, canEdit }) => {
+const HHField = ({ attribute, value, setValue, canEdit = false }) => {
   const [editing, setEditing] = useState(false);
   const [changed, setChanged] = useState(false);
 

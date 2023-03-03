@@ -65,7 +65,7 @@ const LoggedInTabs = ({ route }) => {
         }}
       />
       <Tab.Screen
-        name="OtherProfile"
+        name="UnknownProfile"
         component={UnknownProfile}
         initialParams={{ ...route.params, profileUser: null }}
         options={{

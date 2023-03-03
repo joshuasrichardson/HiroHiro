@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import AppContext from "../components/AppContext";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { IconButton, List } from "react-native-paper";
-import Profile from "./Profile";
+import ConnectionProfile from "./ConnectionProfile";
 import SlideDownOnExit from "../components/SlideDownOnExit";
 
 const UserList = () => {
@@ -25,7 +25,7 @@ const UserList = () => {
     return (
       <SlideDownOnExit open={open}>
         <IconButton icon="arrow-down" onPress={closeProfile} />
-        <Profile route={{ params: { profileUser } }} />
+        <ConnectionProfile route={{ params: { profileUser } }} />
       </SlideDownOnExit>
     );
   }
